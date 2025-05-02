@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastrar Aluno</title>
   <style>
     * {
@@ -35,7 +35,6 @@
       text-decoration: none;
       margin-bottom: 15px;
       font-size: 16px;
-      transition: background 0.3s;
       padding: 8px;
       border-radius: 4px;
     }
@@ -45,7 +44,7 @@
     }
 
     .main-content {
-      flex: 1;
+      flex-grow: 1;
       padding: 30px;
     }
 
@@ -98,18 +97,21 @@
 </head>
 <body>
 
+  <!-- Barra lateral -->
   <div class="sidebar">
     <h2>Gestor</h2>
     <a href="dashboard.html">Dashboard</a>
     <a href="cadastrar-aluno.html">Cadastrar Aluno</a>
   </div>
 
+  <!-- Conteúdo principal -->
   <div class="main-content">
     <div class="header">
       <h1>Cadastrar Aluno</h1>
-      <button onclick="logout()">Sair</button>
+      <button onclick="fazerLogout()">Sair</button>
     </div>
 
+    <!-- Formulário para cadastrar aluno -->
     <div class="form-container">
       <form id="form-aluno">
         <div class="form-group">
@@ -133,23 +135,30 @@
   </div>
 
   <script>
-    function logout() {
+    function fazerLogout() {
+      // Remove o token do localStorage
       localStorage.removeItem("token");
+
+      // Redireciona para a página de login
       window.location.href = "index.html";
     }
 
+    // Função de envio do formulário
     document.getElementById("form-aluno").addEventListener("submit", function(event) {
       event.preventDefault();
+
+      // Coleta os valores dos campos
       const nome = document.getElementById("nome").value;
       const cpf = document.getElementById("cpf").value;
       const data_nascimento = document.getElementById("data_nascimento").value;
 
       const aluno = { nome, cpf, data_nascimento };
 
+      // Exibe o aluno cadastrado (pode ser substituído por uma requisição para o backend)
       console.log("Aluno cadastrado:", aluno);
       alert("Aluno cadastrado com sucesso!");
 
-      // Aqui você poderá depois fazer uma requisição fetch() para o backend com o aluno
+      // Reseta o formulário após cadastro
       this.reset();
     });
   </script>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <style>
     * {
@@ -35,7 +35,6 @@
       text-decoration: none;
       margin-bottom: 15px;
       font-size: 16px;
-      transition: background 0.3s;
       padding: 8px;
       border-radius: 4px;
     }
@@ -45,7 +44,7 @@
     }
 
     .main-content {
-      flex: 1;
+      flex-grow: 1;
       padding: 30px;
     }
 
@@ -72,24 +71,30 @@
 </head>
 <body>
 
+  <!-- Barra lateral -->
   <div class="sidebar">
     <h2>Gestor</h2>
     <a href="dashboard.html">Dashboard</a>
     <a href="cadastrar-aluno.html">Cadastrar Aluno</a>
   </div>
 
+  <!-- Conteúdo principal -->
   <div class="main-content">
     <div class="header">
       <h1>Dashboard</h1>
-      <button class="logout-btn" onclick="logout()">Sair</button>
+      <button class="logout-btn" onclick="fazerLogout()">Sair</button>
     </div>
     <p>Bem-vindo ao painel do gestor!</p>
-    <!-- Aqui vai entrar a tabela com os alunos futuramente -->
+
+    <!-- Espaço para futuras tabelas ou dados dos alunos -->
   </div>
 
   <script>
-    function logout() {
+    function fazerLogout() {
+      // Remove o token do localStorage
       localStorage.removeItem("token");
+
+      // Redireciona para a página de login
       window.location.href = "index.html";
     }
   </script>
