@@ -30,30 +30,6 @@ db.connect((err) => {
   console.log("Conectado ao banco de dados MySQL!");
 });
 
-// Rota de login
-app.post("/login", async (req, res) => {
-  const { cpf, senha } = req.body;
-
-  db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf], async (err, results) => {
-    if (err) return res.status(500).json({ mensagem: "Erro no servidor." });
-
-    const usuario = results[0];
-
-    if (!usuario) {
-      return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
-    }
-
-    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-
-    if (!senhaCorreta) {
-      return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
-    }
-
-    const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
-    return res.json({ mensagem: "Login bem-sucedido!", token });
-  });
-});
-
 // Middleware para verificar o token nas rotas protegidas
 const verificarToken = (req, res, next) => {
   const token = req.headers["authorization"];
@@ -67,9 +43,37 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-// Rota da dashboard protegida
-app.get("/dashboard", verificarToken, (req, res) => {
-  res.json({ mensagem: "Bem-vindo ao painel protegido!", cpf: req.cpf });
+// Rota de login
+app.post("/login", async (req, res) => {
+  const { cpf, senha } = req.body;
+
+  db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf], async (err, results) => {
+    if (err) {
+      console.error("Erro no SELECT da tabela 'gestores':", err);
+      return res.status(500).json({ mensagem: "Erro no servidor ao buscar gestor.", erro: err.message });
+    }
+
+    const usuario = results[0];
+
+    if (!usuario) {
+      return res.status(401).json({ mensagem: "CPF ou senha incorretos (usuário não encontrado)." });
+    }
+
+    try {
+      const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+
+      if (!senhaCorreta) {
+        return res.status(401).json({ mensagem: "CPF ou senha incorretos (senha inválida)." });
+      }
+
+      const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
+      return res.json({ mensagem: "Login bem-sucedido!", token });
+
+    } catch (erroComparacao) {
+      console.error("Erro ao comparar a senha:", erroComparacao);
+      return res.status(500).json({ mensagem: "Erro interno ao verificar senha.", erro: erroComparacao.message });
+    }
+  });
 });
 
 // Rota que busca alunos com médias e status de aprovação
