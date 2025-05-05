@@ -14,7 +14,7 @@ const Dashboard = () => {
     <div className="dashboard-body">
       {/* Barra lateral */}
       <div className="sidebar">
-        <h2>Gestor</h2>
+        <h2>Bem Vindo Gestor(a)</h2>
         <a href="/dashboard">Dashboard</a>
         <a href="/cadastrar-aluno">Cadastrar Aluno</a>
       </div>

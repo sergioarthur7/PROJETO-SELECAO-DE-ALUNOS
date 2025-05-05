@@ -64,11 +64,14 @@ const Login = () => {
             onChange={(e) => setSenha(e.target.value)}
             required
           />
+          <p style={{ marginTop: '10px', fontSize: '14px' }}>
+  <a href="#" style={{ color: '#2980b9' }}>Esqueceu sua senha?</a>
+</p>
         </div>
 
-        <br />
-
         <button type="submit">Entrar</button>
+
+
       </form>
     </div>
   );

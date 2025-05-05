@@ -1,11 +1,14 @@
 .dashboard-body {
   display: flex;
-  font-family: Arial, sans-serif;
+  align-items: stretch; /* isso garante que sidebar e conteúdo principal cresçam verticalmente */
   height: 100vh;
+  width: 100vw; /* força ocupar a tela toda */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: green
 }
+
 
 .sidebar {
   width: 220px;
@@ -16,14 +19,15 @@
 
 .sidebar h2 {
   margin-bottom: 30px;
-  font-size: 22px;
+  font-size: 25px;
+  color: #ffffff;
 }
 
 .sidebar a {
   display: block;
   color: white;
   text-decoration: none;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   font-size: 16px;
   padding: 8px;
   border-radius: 4px;
@@ -36,6 +40,7 @@
 .main-content {
   flex-grow: 1;
   padding: 30px;
+  
 }
 
 .header {
@@ -46,13 +51,17 @@
 }
 
 .logout-btn {
+  display: inline-block;
+  width: auto;
   padding: 8px 16px;
   background-color: #e74c3c;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: auto; /* isso empurra o botão para a direita */
 }
+
 
 .logout-btn:hover {
   background-color: #c0392b;
