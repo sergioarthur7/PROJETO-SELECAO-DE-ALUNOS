@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mysql = require("mysql2");
 const path = require("path");
 
 const app = express();
@@ -13,22 +12,6 @@ app.use(express.json());
 app.use(cors()); // Permite que o frontend acesse a API
 app.use(express.static(path.join(__dirname, "public")));
 
-// Conexão com banco de dados MySQL
-const db = mysql.createConnection({
-  host: "45.132.157.103",
-  user: "u981546547_kaio",
-  password: "8;KUYNI?We",
-  database: "u981546547_selecao2",
-  port: 3306
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error("Erro ao conectar no banco de dados:", err);
-    return;
-  }
-  console.log("Conectado ao banco de dados MySQL!");
-});
 
 // Middleware para verificar o token nas rotas protegidas
 const verificarToken = (req, res, next) => {
