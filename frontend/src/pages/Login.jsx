@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import "../styles/Login.css"; // Você pode criar este CSS separado ou usar styled-components
+import "../styles/Login.css";
+
+// ✅ Usa variável de ambiente para a URL da API
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const Login = () => {
   const [cpf, setCpf] = useState('');
@@ -8,12 +11,15 @@ const Login = () => {
   const handleSubmit = (evento) => {
     evento.preventDefault();
 
-    fetch('http://localhost:3000/login', {
+    // 🔧 Limpa o CPF (remove pontos, traços, letras, espaços etc.)
+    const cpfLimpo = cpf.replace(/\D/g, '');
+
+    fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ cpf, senha }),
+      body: JSON.stringify({ cpf: cpfLimpo, senha }),
     })
       .then((res) => res.json())
       .then((dados) => {
@@ -65,13 +71,11 @@ const Login = () => {
             required
           />
           <p style={{ marginTop: '10px', fontSize: '14px' }}>
-  <a href="#" style={{ color: '#2980b9' }}>Esqueceu sua senha?</a>
-</p>
+            <a href="#" style={{ color: '#2980b9' }}>Esqueceu sua senha?</a>
+          </p>
         </div>
 
         <button type="submit">Entrar</button>
-
-
       </form>
     </div>
   );
