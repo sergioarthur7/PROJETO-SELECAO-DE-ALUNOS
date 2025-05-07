@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/Dashboard.css"; // Arquivo CSS externo se quiser separar os estilos
+import '../styles/Dashboard.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [sidebarAberta, setSidebarAberta] = useState(false);
 
   const fazerLogout = () => {
     localStorage.removeItem("token");
@@ -12,22 +13,28 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-body">
-      {/* Barra lateral */}
-      <div className="sidebar">
-        <h2>Bem Vindo Gestor(a)</h2>
+      {/* botão de menu sempre no topo-esquerdo */}
+      <button
+        className="menu-btn"
+        onClick={() => setSidebarAberta(!sidebarAberta)}
+      >
+        ☰
+      </button>
+
+      {/* sidebar que desliza da esquerda */}
+      <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
+        <h2>Menu</h2>
         <a href="/dashboard">Dashboard</a>
         <a href="/cadastrar-aluno">Cadastrar Aluno</a>
+        <button className="logout-link" onClick={fazerLogout}>
+          Sair
+        </button>
       </div>
 
-      {/* Conteúdo principal */}
+      {/* conteúdo principal */}
       <div className="main-content">
-        <div className="header">
-          <h1>Dashboard</h1>
-          <button className="logout-btn" onClick={fazerLogout}>Sair</button>
-        </div>
-        <p>Bem-vindo ao painel do gestor!</p>
-
-        {/* Espaço para futuras tabelas ou dados dos alunos */}
+        <h1>Página Inicial</h1>
+        <p>Bem‑vindo ao painel do gestor!</p>
       </div>
     </div>
   );
