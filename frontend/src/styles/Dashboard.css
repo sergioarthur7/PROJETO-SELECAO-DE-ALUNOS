@@ -1,68 +1,107 @@
+/* Dashboard.css */
+
+/* Container principal com gradiente */
 .dashboard-body {
+  position: relative;
   display: flex;
-  align-items: stretch; /* isso garante que sidebar e conteúdo principal cresçam verticalmente */
+  align-items: flex-start;    /* alinha no topo */
+  justify-content: flex-start;/* alinha à esquerda */
   height: 100vh;
-  width: 100vw; /* força ocupar a tela toda */
+  width: 100vw;
   margin: 0;
+  background: linear-gradient(135deg, #3b771d, #3e7025);
+  overflow: hidden;
+}
+
+/* Botão de menu – pequeno e no canto esquerdo */
+.menu-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  box-sizing: border-box;
-  background-color: green
-}
-
-
-.sidebar {
-  width: 220px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px;
-}
-
-.sidebar h2 {
-  margin-bottom: 30px;
-  font-size: 25px;
-  color: #ffffff;
-}
-
-.sidebar a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  margin-bottom: 5px;
-  font-size: 16px;
-  padding: 8px;
-  border-radius: 4px;
-}
-
-.sidebar a:hover {
-  background-color: #34495e;
-}
-
-.main-content {
-  flex-grow: 1;
-  padding: 30px;
-  
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.logout-btn {
-  display: inline-block;
-  width: auto;
-  padding: 8px 16px;
-  background-color: #e74c3c;
-  color: white;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  background: #2c3e50;
+  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: auto; /* isso empurra o botão para a direita */
+  z-index: 1000;
+}
+.menu-btn:hover {
+  background: #1a252f;
 }
 
+/* Sidebar – desliza da esquerda */
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: -220px;           /* escondida fora da tela */
+  width: 220px;
+  height: 100%;
+  background: rgb(32, 66, 36);
+  color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: left 0.3s ease;
+  z-index: 900;
+}
+.sidebar.open {
+  left: 0;
+}
 
-.logout-btn:hover {
-  background-color: #c0392b;
+.sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.sidebar a,
+.logout-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sidebar a:hover,
+.logout-link:hover {
+  background: #34495e;
+}
+
+/* Conteúdo principal – com espaçamento para não ficar embaixo do botão */
+.main-content {
+  flex: 1;
+  padding: 60px 30px 30px; /* 60px no topo empurra tudo para baixo */
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease;
+}
+
+/* Quando a sidebar abre, empurra o conteúdo */
+.sidebar.open ~ .main-content {
+  margin-left: 220px;
+}
+
+/* Cabeçalho */
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 8px; /* espaçamento mínimo entre botão e título */
+}
+
+/* Título */
+.header h1 {
+  margin: 0;
+  font-size: 24px;
 }
