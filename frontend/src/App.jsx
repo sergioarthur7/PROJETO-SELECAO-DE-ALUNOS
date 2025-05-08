@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
 // Importação das páginas
@@ -7,15 +6,17 @@ import Dashboard from './pages/Dashboard'
 import CadastrarAluno from './pages/CadastrarAluno'
 import Conta from './pages/Conta'
 import Notwithstanding from './pages/Notwithstanding'
+import CadastrarNotas from './pages/CadastrarNotas' 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} /> {/* Redireciona para /login */}
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/cadastrar-aluno" element={<CadastrarAluno />} />
+        <Route path="/cadastrar-notas" element={<CadastrarNotas />} /> 
         <Route path="/conta" element={<Conta />} />
         <Route path="/notwithstanding" element={<Notwithstanding />} />
       </Routes>
@@ -23,4 +24,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

@@ -1,96 +1,76 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Dashboard.css';
 
 const CadastrarAluno = () => {
+  const [sidebarAberta, setSidebarAberta] = useState(false);
+  const navigate = useNavigate();
+
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
+  const [comprovante, setComprovante] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    const aluno = { nome, cpf, dataNascimento };
 
-    console.log("Aluno cadastrado:", aluno);
-    alert("Aluno cadastrado com sucesso!");
+    const dadosParciais = {
+      nome,
+      cpf,
+      data_nascimento: dataNascimento,
+      comprovante_residencia: comprovante
+    };
 
-    // Reseta o formulário após cadastro
-    setNome('');
-    setCpf('');
-    setDataNascimento('');
+    // Salva temporariamente no localStorage
+    localStorage.setItem("dadosAluno", JSON.stringify(dadosParciais));
+
+    // Redireciona para formulário de notas
+    navigate("/cadastrar-notas");
   };
 
-  const handleLogout = () => {
+  const fazerLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/"; // Redireciona para a página inicial
+    navigate("/login");
   };
 
   return (
-    <div className="main-content" style={{ display: 'flex', fontFamily: 'Arial, sans-serif', height: '100vh' }}>
-      {/* Barra lateral */}
-      <div className="sidebar" style={{ width: '220px', backgroundColor: '#2c3e50', color: 'white', padding: '20px' }}>
-        <h2>Gestor</h2>
-        <a href="/dashboard" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '15px', fontSize: '16px', padding: '8px', borderRadius: '4px' }}>Dashboard</a>
-        <a href="/cadastrar-aluno" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '15px', fontSize: '16px', padding: '8px', borderRadius: '4px' }}>Cadastrar Aluno</a>
+    <div className="dashboard-body">
+      <button className="menu-btn" onClick={() => setSidebarAberta(!sidebarAberta)}>☰</button>
+
+      <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
+        <h2>Menu</h2>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/cadastrar-aluno">Cadastrar Aluno</a>
+        <button className="logout-link" onClick={fazerLogout}>Sair</button>
       </div>
 
-      {/* Conteúdo principal */}
-      <div className="main-content" style={{ flexGrow: '1', padding: '30px' }}>
-        <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h1>Cadastrar Aluno</h1>
-          <button onClick={handleLogout} style={{ padding: '10px 20px', backgroundColor: '#2980b9', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }}>Sair</button>
-        </div>
-
-        {/* Formulário para cadastrar aluno */}
-        <div className="form-container" style={{ maxWidth: '500px', backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '6px' }}>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group" style={{ marginBottom: '15px' }}>
-              <label htmlFor="nome" style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Nome do Aluno</label>
-              <input
-                type="text"
-                id="nome"
-                name="nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                required
-                style={{ width: '100%', padding: '8px', fontSize: '14px', border: '1px solid #ccc', borderRadius: '4px' }}
-              />
-            </div>
-
-            <div className="form-group" style={{ marginBottom: '15px' }}>
-              <label htmlFor="cpf" style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>CPF</label>
-              <input
-                type="text"
-                id="cpf"
-                name="cpf"
-                maxLength="11"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                required
-                style={{ width: '100%', padding: '8px', fontSize: '14px', border: '1px solid #ccc', borderRadius: '4px' }}
-              />
-            </div>
-
-            <div className="form-group" style={{ marginBottom: '15px' }}>
-              <label htmlFor="data_nascimento" style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Data de Nascimento</label>
-              <input
-                type="date"
-                id="data_nascimento"
-                name="data_nascimento"
-                value={dataNascimento}
-                onChange={(e) => setDataNascimento(e.target.value)}
-                required
-                style={{ width: '100%', padding: '8px', fontSize: '14px', border: '1px solid #ccc', borderRadius: '4px' }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              style={{ padding: '10px 20px', backgroundColor: '#2980b9', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }}
-            >
-              Cadastrar
-            </button>
-          </form>
-        </div>
+      <div className="main-content">
+        <h1>Cadastro - Dados Pessoais</h1>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '500px', backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '6px' }}>
+          <div style={{ marginBottom: '15px' }}>
+            <label>Nome</label>
+            <input type="text" value={nome} onChange={e => setNome(e.target.value)} required />
+          </div>
+          <div style={{ marginBottom: '15px' }}>
+            <label>CPF</label>
+            <input type="text" maxLength="11" value={cpf} onChange={e => setCpf(e.target.value)} required />
+          </div>
+          <div style={{ marginBottom: '15px' }}>
+            <label>Data de Nascimento</label>
+            <input type="date" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} required />
+          </div>
+          <div style={{ marginBottom: '15px' }}>
+            <label>Comprovante de Residência</label>
+            <select value={comprovante} onChange={e => setComprovante(e.target.value)} required>
+              <option value="">Selecione</option>
+              <option value="Água">Água</option>
+              <option value="Energia">Energia</option>
+              <option value="Telefone">Telefone</option>
+              <option value="Correspondência bancária">Correspondência bancária</option>
+            </select>
+          </div>
+          <button type="submit">Próximo</button>
+        </form>
       </div>
     </div>
   );
