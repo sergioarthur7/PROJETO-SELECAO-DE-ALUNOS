@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Dashboard.css';
+import '../styles/Dashboard.css'; // Certifique-se de que a folha de estilo existe e está correta
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -17,6 +17,7 @@ const materias = [
 
 const CadastrarNotas = () => {
   const navigate = useNavigate();
+  const [sidebarAberta, setSidebarAberta] = useState(false);
   const [notas, setNotas] = useState({});
   const [mediaFinal, setMediaFinal] = useState(0);
   const [aluno, setAluno] = useState(null);
@@ -42,7 +43,6 @@ const CadastrarNotas = () => {
     const novaNota = { ...notas[materia], [ano]: valorLimpo };
     setNotas({ ...notas, [materia]: novaNota });
 
-    // Recalcular média final
     const todasNotas = Object.values({ ...notas, [materia]: novaNota }).flatMap(n => Object.values(n).map(Number));
     const somatorio = todasNotas.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0);
     const totalNotas = todasNotas.filter(n => !isNaN(n)).length;
@@ -80,8 +80,25 @@ const CadastrarNotas = () => {
     }
   };
 
+  const fazerLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="dashboard-body">
+      <button className="menu-btn" onClick={() => setSidebarAberta(!sidebarAberta)}>☰</button>
+
+      {/* Sidebar */}
+      <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
+        <h2>Menu</h2>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/cadastrar-aluno">Cadastrar Aluno</a>
+        <a href="/cadastrar-notas">Cadastrar Notas</a>
+        <button className="logout-link" onClick={fazerLogout}>Sair</button>
+      </div>
+
+      {/* Main content */}
       <div className="main-content">
         <h1>Cadastro - Notas por Ano</h1>
         <form onSubmit={handleSubmit} style={{ overflowX: 'auto' }}>
