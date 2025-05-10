@@ -39,26 +39,31 @@ const CadastrarNotas = () => {
   }, []);
 
   const handleChange = (materia, ano, valor) => {
-    const valorLimpo = valor.replace(",", ".");
+    const valorLimpo = valor.replace(",", "."); // Substitui vírgula por ponto
     const novaNota = { ...notas[materia], [ano]: valorLimpo };
     setNotas({ ...notas, [materia]: novaNota });
 
+    // Recalcular média
     const todasNotas = Object.values({ ...notas, [materia]: novaNota }).flatMap(n => Object.values(n).map(Number));
     const somatorio = todasNotas.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0);
     const totalNotas = todasNotas.filter(n => !isNaN(n)).length;
-    setMediaFinal(totalNotas ? (somatorio / totalNotas).toFixed(2) : 0);
+
+    // Atualizando a média final
+    setMediaFinal(totalNotas ? (somatorio / totalNotas).toFixed(3) : "0.000");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Garantindo que a média final esteja atualizada antes de enviar os dados
     const alunoCompleto = {
       ...aluno,
       notas,
-      media_final: parseFloat(mediaFinal)
+      media_final: parseFloat(mediaFinal.replace(",", ".")) // Certificando-se que a média está em formato numérico
     };
 
     try {
+      console.log("Enviando:", alunoCompleto);
       const response = await fetch(`${API_URL}/alunos`, {
         method: "POST",
         headers: {

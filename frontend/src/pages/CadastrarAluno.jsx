@@ -10,22 +10,25 @@ const CadastrarAluno = () => {
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [comprovante, setComprovante] = useState('');
+  const [mensagem, setMensagem] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const dadosParciais = {
+    const dadosAluno = {
       nome,
       cpf,
       data_nascimento: dataNascimento,
-      comprovante_residencia: comprovante
+      comprovante_residencia: comprovante // Corrigido o nome da variável para corresponder ao backend
     };
 
-    // Salva temporariamente no localStorage
-    localStorage.setItem("dadosAluno", JSON.stringify(dadosParciais));
+    console.log('Enviando dados do aluno:', dadosAluno);  // Log para verificar os dados
 
-    // Redireciona para formulário de notas
-    navigate("/cadastrar-notas");
+    // Armazenar os dados do aluno em localStorage para a próxima página
+    localStorage.setItem('dadosAluno', JSON.stringify(dadosAluno));
+
+    // Redireciona para a próxima página (Cadastro de Notas)
+    navigate('/cadastrar-notas');
   };
 
   const fazerLogout = () => {
@@ -45,21 +48,22 @@ const CadastrarAluno = () => {
       </div>
 
       <div className="main-content">
-        <h1>Cadastro - Dados Pessoais</h1>
-        <form onSubmit={handleSubmit} style={{ maxWidth: '500px', backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '6px' }}>
-          <div style={{ marginBottom: '15px' }}>
+        <h1>Cadastro de Aluno</h1>
+        {mensagem && <p>{mensagem}</p>}
+        <form onSubmit={handleSubmit} className="formulario-aluno">
+          <div className="form-group">
             <label>Nome</label>
             <input type="text" value={nome} onChange={e => setNome(e.target.value)} required />
           </div>
-          <div style={{ marginBottom: '15px' }}>
+          <div className="form-group">
             <label>CPF</label>
             <input type="text" maxLength="11" value={cpf} onChange={e => setCpf(e.target.value)} required />
           </div>
-          <div style={{ marginBottom: '15px' }}>
+          <div className="form-group">
             <label>Data de Nascimento</label>
             <input type="date" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} required />
           </div>
-          <div style={{ marginBottom: '15px' }}>
+          <div className="form-group">
             <label>Comprovante de Residência</label>
             <select value={comprovante} onChange={e => setComprovante(e.target.value)} required>
               <option value="">Selecione</option>
@@ -69,7 +73,7 @@ const CadastrarAluno = () => {
               <option value="Correspondência bancária">Correspondência bancária</option>
             </select>
           </div>
-          <button type="submit">Próximo</button>
+          <button type="submit" className="btn-submit">Próximo</button>
         </form>
       </div>
     </div>
