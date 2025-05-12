@@ -93,7 +93,7 @@
   font-size: 50px;
 }
 .main-content p {
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 30px;
 }
 
@@ -181,8 +181,8 @@ input[type="number"] {
 }
 
 input[type="number"]:focus {
-  border-color: #00ff1e;
-  background-color: #000000;
+  border-color: #009912;
+  background-color: #ffffff;
   outline: none;
 }
 
@@ -264,8 +264,8 @@ p {
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #007BFF;
-  background-color: #000000;
+  border-color: #00b224;
+  background-color: #ffffff;
   outline: none;
 }
 
@@ -282,7 +282,7 @@ p {
 }
 
 .btn-submit:hover {
-  background-color: #0056b3;
+  background-color: #36485b;
 }
 
 .btn-submit:active {

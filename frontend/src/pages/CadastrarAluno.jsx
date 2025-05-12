@@ -10,6 +10,7 @@ const CadastrarAluno = () => {
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [comprovante, setComprovante] = useState('');
+  const [cota, setCota] = useState('');  // Nova variável para a seleção de cota
   const [mensagem, setMensagem] = useState('');
 
   const handleSubmit = async (event) => {
@@ -19,7 +20,8 @@ const CadastrarAluno = () => {
       nome,
       cpf,
       data_nascimento: dataNascimento,
-      comprovante_residencia: comprovante // Corrigido o nome da variável para corresponder ao backend
+      comprovante_residencia: comprovante, // Corrigido para manter consistência com o backend
+      cota
     };
 
     console.log('Enviando dados do aluno:', dadosAluno);  // Log para verificar os dados
@@ -57,7 +59,15 @@ const CadastrarAluno = () => {
           </div>
           <div className="form-group">
             <label>CPF</label>
-            <input type="text" maxLength="11" value={cpf} onChange={e => setCpf(e.target.value)} required />
+            <input 
+              type="text" 
+              maxLength="11" 
+              value={cpf} 
+              onChange={e => setCpf(e.target.value)} 
+              required 
+              pattern="\d{11}" // Validação para garantir que o CPF tenha 11 números
+              title="Digite um CPF válido (somente números)"
+            />
           </div>
           <div className="form-group">
             <label>Data de Nascimento</label>
@@ -73,6 +83,18 @@ const CadastrarAluno = () => {
               <option value="Correspondência bancária">Correspondência bancária</option>
             </select>
           </div>
+          <div className="form-group">
+            <label>Cota</label>
+            <select value={cota} onChange={e => setCota(e.target.value)} required>
+              <option value="">Selecione</option>
+              <option value="RPAC">REDE PÚBLICA – AMPLA CONCORRÊNCIA</option>
+              <option value="RDTE">REDE PÚBLICA – COTA TERRITÓRIO DA ESCOLA</option>
+              <option value="RPRAC">REDE PRIVADA – AMPLA CONCORRÊNCIA</option>
+              <option value="RPRTE">REDE PRIVADA – COTA TERRITÓRIO DA ESCOLA</option>
+              <option value="ECD">ESTUDANTES COM DEFICIÊNCIA</option>
+            </select>
+          </div>
+
           <button type="submit" className="btn-submit">Próximo</button>
         </form>
       </div>
