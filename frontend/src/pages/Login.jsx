@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import "../styles/Login.css";
 
-// ✅ Usa variável de ambiente para a URL da API
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+// ✅ Usa URL pública da Vercel por padrão
+const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao.vercel.app";
 
 const Login = () => {
   const [cpf, setCpf] = useState('');
@@ -11,7 +11,6 @@ const Login = () => {
   const handleSubmit = (evento) => {
     evento.preventDefault();
 
-    // 🔧 Limpa o CPF (remove pontos, traços, letras, espaços etc.)
     const cpfLimpo = cpf.replace(/\D/g, '');
 
     fetch(`${API_URL}/login`, {
@@ -26,9 +25,9 @@ const Login = () => {
         if (dados.token) {
           localStorage.setItem('token', dados.token);
           alert('Login bem-sucedido!');
-          window.location.href = '/dashboard';
+          window.location.href = '/dashboard'; // ou use o react-router
         } else {
-          alert(dados.mensagem);
+          alert(dados.mensagem || 'Falha no login.');
         }
       })
       .catch((erro) => {
@@ -43,7 +42,7 @@ const Login = () => {
         <h2>Login</h2>
 
         <div className="logo">
-          <img src="/img/images.png" alt="Logotipo" />
+          <img src="/img/images.png" alt="Logotipo" /> {/* Corrigido o caminho */}
         </div>
 
         <div className="input-group">
@@ -74,7 +73,6 @@ const Login = () => {
             <a href="#" style={{ color: '#2980b9' }}>Esqueceu sua senha?</a>
           </p>
         </div>
-
         <button type="submit">Entrar</button>
       </form>
     </div>

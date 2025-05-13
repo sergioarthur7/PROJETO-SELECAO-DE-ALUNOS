@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Dashboard.css';
+import '../styles/CadastrarAluno.css';
 
 const CadastrarAluno = () => {
   const [sidebarAberta, setSidebarAberta] = useState(false);
