@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const usuario = results[0];
 
     if (!usuario) {
-      return res.status(401).json({ mensagem: "CPF ou senha incorretos (usuário não encontrado)." });
+      return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
     }
 
     try {
