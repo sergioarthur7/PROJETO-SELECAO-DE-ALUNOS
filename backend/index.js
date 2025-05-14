@@ -10,10 +10,10 @@ require("dotenv").config();
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || "sua_chave_secreta";
 
-const db = require("../db");
-const loginRoutes = require("../routes/login");
-const gestoresRoutes = require("../routes/gestores");
-const cadastroAlunoRoutes = require("../routes/cadastroAluno");
+const db = require("./db");
+const loginRoutes = require("./routes/login");
+const gestoresRoutes = require("./routes/gestores");
+const cadastroAlunoRoutes = require("./routes/cadastroAluno");
 
 // Middleware
 app.use(express.json());
