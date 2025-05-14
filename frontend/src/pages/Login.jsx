@@ -13,7 +13,7 @@ const Login = () => {
 
     const cpfLimpo = cpf.replace(/\D/g, '');
 
-    fetch(`${API_URL}/login`, {
+    fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

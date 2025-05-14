@@ -1,23 +1,26 @@
+// backend/api/cadastroAluno.js
 const db = require('../db');
 
-export default async function handler(req, res) {
+module.exports = (req, res) => {
   if (req.method === 'POST') {
-    const { nome, cpf, data_nascimento, comprovante_residencia, media_final } = req.body;
+    const { cpf, nome, data_nascimento, comprovante_residencia, media_final } = req.body;
 
-    const query = `
-      INSERT INTO alunos (nome, cpf, data_nascimento, comprovante_residencia, media_final)
+    if (!cpf || !nome || !data_nascimento || !comprovante_residencia || media_final === undefined || isNaN(media_final)) {
+      return res.status(400).json({ mensagem: "Dados inválidos ou incompletos." });
+    }
+
+    const sql = `
+      INSERT INTO alunos (cpf, nome, data_nascimento, comprovante_residencia, media_final)
       VALUES (?, ?, ?, ?, ?)
     `;
 
-    db.query(query, [nome, cpf, data_nascimento, comprovante_residencia, media_final], (err, result) => {
+    db.query(sql, [cpf, nome, data_nascimento, comprovante_residencia, media_final], (err, result) => {
       if (err) {
-        console.error("Erro ao cadastrar aluno:", err);
+        console.error("Erro ao inserir aluno:", err);
         return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
       }
 
-      res.status(201).json({ mensagem: "Aluno cadastrado com sucesso!", alunoId: result.insertId });
+      res.status(200).json({ mensagem: "Aluno cadastrado com sucesso." });
     });
-  } else {
-    res.status(405).json({ mensagem: 'Método não permitido' });
   }
-}
+};
