@@ -1,10 +1,14 @@
 // backend/api/login.js
-const db = require('../db');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
+import db from '../db.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ mensagem: 'Método não permitido.' });
+  }
+
+  const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
   const { cpf, senha } = req.body;
 
   db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf], async (err, results) => {
@@ -27,10 +31,11 @@ module.exports = async (req, res) => {
       }
 
       const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
-      return res.json({ mensagem: "Login bem-sucedido!", token });
+      return res.status(200).json({ mensagem: "Login bem-sucedido!", token });
+
     } catch (erroComparacao) {
       console.error("Erro ao comparar a senha:", erroComparacao);
       return res.status(500).json({ mensagem: "Erro interno ao verificar senha.", erro: erroComparacao.message });
     }
   });
-};
+}

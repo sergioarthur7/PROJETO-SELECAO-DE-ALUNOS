@@ -1,12 +1,14 @@
-const express = require('express');
-const router = express.Router();
 const db = require('../db'); // conexão com MySQL
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
-// Rota de login
-router.post("/login", async (req, res) => {
+module.exports = async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ mensagem: 'Método não permitido' });
+  }
+
   const { cpf, senha } = req.body;
 
   db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf], async (err, results) => {
@@ -35,14 +37,5 @@ router.post("/login", async (req, res) => {
       console.error("Erro ao comparar a senha:", erroComparacao);
       return res.status(500).json({ mensagem: "Erro interno ao verificar senha.", erro: erroComparacao.message });
     }
-
-
-    
   });
-  
-  
-});
-
-
-
-module.exports = router;
+};
