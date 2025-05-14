@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
       if (!senhaCorreta) {
-        return res.status(401).json({ mensagem: "CPF ou senha incorretos (senha inválida)." });
+        return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
       }
 
       const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
