@@ -1,17 +1,20 @@
 // backend/api/gestores.js
 const db = require('../db');
+const verificarToken = require('./middleware/verificarToken');
 
 module.exports = (req, res) => {
   if (req.method === 'GET') {
-    const query = 'SELECT nome, cpf FROM gestores';
+    verificarToken(req, res, () => {
+      const query = 'SELECT nome, cpf FROM gestores';
 
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error('Erro ao buscar gestores:', err);
-        return res.status(500).json({ mensagem: 'Erro interno no servidor' });
-      }
+      db.query(query, (err, results) => {
+        if (err) {
+          console.error('Erro ao buscar gestores:', err);
+          return res.status(500).json({ mensagem: 'Erro interno no servidor' });
+        }
 
-      res.json({ gestores: results });
+        res.json({ gestores: results });
+      });
     });
   } else if (req.method === 'POST') {
     const { nome, cpf, senha } = req.body;
