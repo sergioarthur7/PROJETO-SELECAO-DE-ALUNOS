@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CadastrarNotas.css'; // Certifique-se de que a folha de estilo existe e está correta
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao.vercel.app";
 
 const materias = [
   "Língua Portuguesa",
@@ -64,7 +64,7 @@ const CadastrarNotas = () => {
 
     try {
       console.log("Enviando:", alunoCompleto);
-      const response = await fetch(`${API_URL}/alunos`, {
+      const response = await fetch(`${API_URL}/api/cadastroAluno`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

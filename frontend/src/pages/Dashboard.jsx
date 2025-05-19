@@ -23,6 +23,7 @@ const Dashboard = () => {
 
       {/* sidebar que desliza da esquerda */}
       <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
+
         <h2>Menu</h2>
         <a href="/dashboard">Dashboard</a>
         <a href="/cadastrar-aluno">Cadastrar Aluno</a>

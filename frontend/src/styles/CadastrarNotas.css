@@ -174,7 +174,7 @@
     width: 80px;
     padding: 8px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 5px;
     text-align: center;
     transition: border 0.3s ease, background-color 0.3s ease;
@@ -182,7 +182,7 @@
   
   input[type="number"]:focus {
     border-color: #009912;
-    background-color: #ffffff;
+    background-color: #323232 !important;
     outline: none;
   }
   
