@@ -128,8 +128,9 @@
   .form-group input:focus,
   .form-group select:focus {
     border-color: #55ff00 !important;
-    background-color: #444 !important;
+    background-color: #ffffff !important;
     outline: none;
+    
   }
   
   .btn-submit {

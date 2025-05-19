@@ -182,7 +182,7 @@
   
   input[type="number"]:focus {
     border-color: #009912;
-    background-color: #323232 !important;
+    background-color: #ffffff !important;
     outline: none;
   }
   
@@ -249,7 +249,7 @@
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #444;
+    color: #ff0000 !important;
   }
   
   .form-group input,
