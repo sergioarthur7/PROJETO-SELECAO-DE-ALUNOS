@@ -55,6 +55,7 @@ const CadastrarNotas = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    
     // Garantindo que a média final esteja atualizada antes de enviar os dados
     const alunoCompleto = {
       ...aluno,

@@ -11,7 +11,7 @@ module.exports = (req, res) => {
 
   if (req.method === 'POST') {
     const {
-      cpf, nome, data_nascimento, comprovante_residencia, media_final, notas
+      cpf, nome, data_nascimento, comprovante_residencia, media_final
     } = req.body;
 
     if (!cpf || !nome || !data_nascimento || !comprovante_residencia || isNaN(media_final)) {
@@ -29,36 +29,7 @@ module.exports = (req, res) => {
         return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
       }
 
-      const alunoId = result.insertId;
-
-      const valoresNotas = [];
-      for (let materia in notas) {
-        const anos = notas[materia];
-        for (let ano in anos) {
-          const nota = parseFloat(anos[ano].toString().replace(',', '.'));
-          if (!isNaN(nota)) {
-            valoresNotas.push([alunoId, materia, ano, nota]);
-          }
-        }
-      }
-
-      if (valoresNotas.length === 0) {
-        return res.status(400).json({ mensagem: "Nenhuma nota válida encontrada." });
-      }
-
-      const insertNotas = `
-        INSERT INTO notas (aluno_id, materia, ano, nota)
-        VALUES ?
-      `;
-
-      db.query(insertNotas, [valoresNotas], (err2) => {
-        if (err2) {
-          console.error("Erro ao inserir notas:", err2);
-          return res.status(500).json({ mensagem: "Erro ao cadastrar notas." });
-        }
-
-        return res.status(200).json({ mensagem: "Aluno e notas cadastrados com sucesso." });
-      });
+      return res.status(200).json({ mensagem: "Aluno cadastrado com sucesso." });
     });
   } else {
     return res.status(405).json({ mensagem: "Método não suportado." });
