@@ -1,12 +1,10 @@
 const db = require('../db');
 
 module.exports = (req, res) => {
-  // Headers de CORS
-  res.setHeader("Access-Control-Allow-Origin", "*"); // ou "http://localhost:5173"
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // Tratamento de requisição preflight (OPTIONS)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -33,7 +31,6 @@ module.exports = (req, res) => {
 
       const alunoId = result.insertId;
 
-      // Agora inserir as notas
       const valoresNotas = [];
       for (let materia in notas) {
         const anos = notas[materia];
@@ -60,10 +57,10 @@ module.exports = (req, res) => {
           return res.status(500).json({ mensagem: "Erro ao cadastrar notas." });
         }
 
-        res.status(200).json({ mensagem: "Aluno e notas cadastrados com sucesso." });
+        return res.status(200).json({ mensagem: "Aluno e notas cadastrados com sucesso." });
       });
     });
   } else {
-    res.status(405).json({ mensagem: "Método não suportado." });
+    return res.status(405).json({ mensagem: "Método não suportado." });
   }
 };
