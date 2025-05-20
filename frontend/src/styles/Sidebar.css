@@ -1,0 +1,36 @@
+/* src/styles/Sidebar.css */
+
+.menu-btn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  
+}
+
+.sidebar {
+  position: fixed;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #0e8104 !important;
+  color: #fff;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar a, .sidebar button.logout-link {
+  display: block;
+  color: white;
+  margin: 10px 0;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

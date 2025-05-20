@@ -11,11 +11,12 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #3b771d;
+  background-image: url(../assets/bg-header.jpg);
+  background-size: 100%;
 }
 
 .container {
   background-color: white;
-  
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
