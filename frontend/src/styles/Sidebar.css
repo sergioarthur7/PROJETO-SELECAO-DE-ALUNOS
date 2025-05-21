@@ -8,26 +8,39 @@
   
 }
 
+
+
 .sidebar {
   position: fixed;
   left: -250px;
   width: 250px;
   height: 100%;
   background-color: #0e8104 !important;
-  color: #fff;
+  color: #fff !important;
   padding: 20px;
   transition: left 0.3s ease;
   z-index: 1000;
+  font-weight: bold !important;
   
+}
+
+.sidebar a :hover {
+  background-color: #ffd102;
+  font-weight: bold !important;
+}
+
+.sidebar h2 :hover{
+  background-color: #0e8104 ;
 }
 
 .sidebar.open {
   left: 0;
 }
 
-.sidebar a, .sidebar button.logout-link {
+.sidebar button.logout-link {
   display: block;
-  color: white;
+  color: rgb(255, 255, 255) !important;
+  font-weight: bold;
   margin: 10px 0;
   text-decoration: none;
   background: none;

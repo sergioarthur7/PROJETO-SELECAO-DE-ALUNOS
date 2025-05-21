@@ -7,7 +7,7 @@ import CadastrarAluno from './pages/CadastrarAluno'
 import Conta from './pages/Conta'
 import Notwithstanding from './pages/Notwithstanding'
 import CadastrarNotas from './pages/CadastrarNotas' 
-
+import VerAlunos from './pages/VerAlunos';
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
         <Route path="/cadastrar-notas" element={<CadastrarNotas />} /> 
         <Route path="/conta" element={<Conta />} />
         <Route path="/notwithstanding" element={<Notwithstanding />} />
+        <Route path="/ver-alunos" element={<VerAlunos />} />
       </Routes>
     </Router>
   )

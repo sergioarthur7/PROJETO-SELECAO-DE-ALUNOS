@@ -249,7 +249,7 @@
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #ff0000 !important;
+    color: #ff0000;
   }
   
   .form-group input,

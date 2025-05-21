@@ -1,6 +1,8 @@
+// src/pages/CadastrarAluno.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CadastrarAluno.css';
+import Sidebar from '../components/Sidebar';
 
 const CadastrarAluno = () => {
   const [sidebarAberta, setSidebarAberta] = useState(false);
@@ -10,7 +12,7 @@ const CadastrarAluno = () => {
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [comprovante, setComprovante] = useState('');
-  const [cota, setCota] = useState('');  // Nova variável para a seleção de cota
+  const [cota, setCota] = useState('');
   const [mensagem, setMensagem] = useState('');
 
   const handleSubmit = async (event) => {
@@ -20,16 +22,11 @@ const CadastrarAluno = () => {
       nome,
       cpf,
       data_nascimento: dataNascimento,
-      comprovante_residencia: comprovante, // Corrigido para manter consistência com o backend
+      comprovante_residencia: comprovante,
       cota
     };
 
-    console.log('Enviando dados do aluno:', dadosAluno);  // Log para verificar os dados
-
-    // Armazenar os dados do aluno em localStorage para a próxima página
     localStorage.setItem('dadosAluno', JSON.stringify(dadosAluno));
-
-    // Redireciona para a próxima página (Cadastro de Notas)
     navigate('/cadastrar-notas');
   };
 
@@ -40,14 +37,7 @@ const CadastrarAluno = () => {
 
   return (
     <div className="dashboard-body">
-      <button className="menu-btn" onClick={() => setSidebarAberta(!sidebarAberta)}>☰</button>
-
-      <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
-        <h2>Menu</h2>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/cadastrar-aluno">Cadastrar Aluno</a>
-        <button className="logout-link" onClick={fazerLogout}>Sair</button>
-      </div>
+      <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
 
       <div className="main-content">
         <h1>Cadastro de Aluno</h1>
@@ -57,6 +47,7 @@ const CadastrarAluno = () => {
             <label>Nome</label>
             <input type="text" value={nome} onChange={e => setNome(e.target.value)} required />
           </div>
+
           <div className="form-group">
             <label>CPF</label>
             <input 
@@ -65,14 +56,16 @@ const CadastrarAluno = () => {
               value={cpf} 
               onChange={e => setCpf(e.target.value)} 
               required 
-              pattern="\d{11}" // Validação para garantir que o CPF tenha 11 números
+              pattern="\d{11}"
               title="Digite um CPF válido (somente números)"
             />
           </div>
+
           <div className="form-group">
             <label>Data de Nascimento</label>
             <input type="date" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} required />
           </div>
+
           <div className="form-group">
             <label>Comprovante de Residência</label>
             <select value={comprovante} onChange={e => setComprovante(e.target.value)} required>
@@ -83,6 +76,7 @@ const CadastrarAluno = () => {
               <option value="Correspondência bancária">Correspondência bancária</option>
             </select>
           </div>
+
           <div className="form-group">
             <label>Cota</label>
             <select value={cota} onChange={e => setCota(e.target.value)} required>

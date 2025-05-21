@@ -35,56 +35,6 @@
     background: #1a252f;
   }
   
-  /* Sidebar – desliza da esquerda */
-  .sidebar {
-    position: absolute;
-    top: 0;
-    left: -220px;           /* escondida fora da tela */
-    width: 220px;
-    height: 100%;
-    background: rgb(32, 66, 36);
-    color: #fff;
-    padding: 20px;
-    box-sizing: border-box;
-    transition: left 0.3s ease;
-    z-index: 900;
-  }
-  .sidebar.open {
-    left: 0;
-  }
-  
-  .sidebar h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 22px;
-  }
-  
-  .sidebar a,
-  .logout-link {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    color: #fff;
-    text-decoration: none;
-    padding: 8px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .sidebar a:hover,
-  .logout-link:hover {
-    background: #34495e;
-  }
-  
-
-  
-  /* Quando a sidebar abre, empurra o conteúdo */
-  .sidebar.open ~ .main-content {
-    margin-left: 220px;
-  }
   
   
   
@@ -112,7 +62,7 @@
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #444;
+    color: #444 !important;
   }
   
   .form-group input,

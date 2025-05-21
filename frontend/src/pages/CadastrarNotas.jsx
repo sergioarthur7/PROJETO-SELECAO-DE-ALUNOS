@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/CadastrarNotas.css'; // Certifique-se de que a folha de estilo existe e está correta
+import '../styles/CadastrarNotas.css';
+import Sidebar from '../components/Sidebar'; // <- Aqui está a importação correta
 
 const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao-de-alunos.vercel.app";
 
@@ -30,7 +31,6 @@ const CadastrarNotas = () => {
     }
     setAluno(dadosAluno);
 
-    // Inicializa matriz de notas
     const inicial = {};
     materias.forEach(materia => {
       inicial[materia] = { ano6: "", ano7: "", ano8: "", ano9: "" };
@@ -39,28 +39,24 @@ const CadastrarNotas = () => {
   }, []);
 
   const handleChange = (materia, ano, valor) => {
-    const valorLimpo = valor.replace(",", "."); // Substitui vírgula por ponto
+    const valorLimpo = valor.replace(",", ".");
     const novaNota = { ...notas[materia], [ano]: valorLimpo };
     setNotas({ ...notas, [materia]: novaNota });
 
-    // Recalcular média
     const todasNotas = Object.values({ ...notas, [materia]: novaNota }).flatMap(n => Object.values(n).map(Number));
     const somatorio = todasNotas.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0);
     const totalNotas = todasNotas.filter(n => !isNaN(n)).length;
 
-    // Atualizando a média final
     setMediaFinal(totalNotas ? (somatorio / totalNotas).toFixed(3) : "0.000");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
-    // Garantindo que a média final esteja atualizada antes de enviar os dados
     const alunoCompleto = {
       ...aluno,
       notas,
-      media_final: parseFloat(mediaFinal.replace(",", ".")) // Certificando-se que a média está em formato numérico
+      media_final: parseFloat(mediaFinal.replace(",", "."))
     };
 
     try {
@@ -95,16 +91,9 @@ const CadastrarNotas = () => {
     <div className="dashboard-body">
       <button className="menu-btn" onClick={() => setSidebarAberta(!sidebarAberta)}>☰</button>
 
-      {/* Sidebar */}
-      <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
-        <h2>Menu</h2>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/cadastrar-aluno">Cadastrar Aluno</a>
-        <a href="/cadastrar-notas">Cadastrar Notas</a>
-        <button className="logout-link" onClick={fazerLogout}>Sair</button>
-      </div>
+      {/* Sidebar funcional */}
+      <Sidebar aberta={sidebarAberta} onLogout={fazerLogout} />
 
-      {/* Main content */}
       <div className="main-content">
         <h1>Cadastro - Notas por Ano</h1>
         <form onSubmit={handleSubmit} style={{ overflowX: 'auto' }}>
