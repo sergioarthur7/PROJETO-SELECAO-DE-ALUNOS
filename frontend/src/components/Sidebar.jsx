@@ -1,7 +1,6 @@
 // src/components/Sidebar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Sidebar.css'; // crie este CSS se quiser separar
 
 const Sidebar = ({ sidebarAberta, setSidebarAberta }) => {
   const navigate = useNavigate();
@@ -22,12 +21,14 @@ const Sidebar = ({ sidebarAberta, setSidebarAberta }) => {
 
       <div className={`sidebar ${sidebarAberta ? 'open' : ''}`}>
         <h2><br />Menu</h2>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/ver-alunos">Ver Alunos</a>
-        <a href="/cadastrar-aluno">Cadastrar Aluno</a>
-        <button className="logout-link" onClick={fazerLogout}>
-          Sair
-        </button>
+        <nav className="sidebar-links">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/ver-alunos">Ver Alunos</a>
+          <a href="/cadastrar-aluno">Cadastrar Aluno</a>
+          <button className="logout-link" onClick={fazerLogout}>
+            Sair
+          </button>
+        </nav>
       </div>
     </>
   );

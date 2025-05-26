@@ -1,8 +1,10 @@
 // src/pages/Dashboard.jsx
 import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
 import { Link } from 'react-router-dom';
-import '../styles/Dashboard.css';
+import Sidebar from '../components/Sidebar'
+
+
+
 
 const Dashboard = () => {
   const [sidebarAberta, setSidebarAberta] = useState(false);

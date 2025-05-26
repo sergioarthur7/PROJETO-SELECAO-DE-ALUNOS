@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import "../styles/Login.css";
 
 // ✅ Usa URL pública da Vercel por padrão
 const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao.vercel.app";

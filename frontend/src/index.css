@@ -1,16 +1,53 @@
+/* ============================
+   VARIÁVEIS E ESTILOS GLOBAIS
+=============================== */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #472121;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* ============================
+   RESET E ELEMENTOS BASE
+=============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #3b771d;
+  background-image: url(src/assets/bg-header.jpg);
+  background-size: 100%;
 }
 
 a {
@@ -18,21 +55,19 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
 }
 
 button {
@@ -46,23 +81,300 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #472121;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* ============================
+   LOGIN
+=============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #3b771d;
+  background-image: url(src/assets/bg-header.jpg);
+  background-size: 100%;
+}
+
+.container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.logo img {
+  width: 80px;
+  margin-bottom: 15px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #309e1a;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #46ce1d;
+}
+
+/* ============================
+   SIDEBAR GERAL
+=============================== */
+.menu-btn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  background: #2c3e50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background: #1a252f;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #0e8104 !important;
+  color: #fff !important;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  font-weight: bold !important;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar h2{
+  color: #ffffff;
+}
+
+.sidebar a:hover {
+  background-color: #ffd102;
+  
+}
+
+.sidebar button.logout-link {
+  display: block;
+  color: rgb(255, 255, 255) !important;
+  font-weight: bold;
+  margin: 10px 0;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sidebar a {
+  font-weight: bold;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sidebar-links a,
+.sidebar-links .logout-link {
+  color: white;
+  background: none;
+  border: none;
+  text-align: left;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+/* ============================
+   DASHBOARD
+=============================== */
+.dashboard-body {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  padding: 60px 30px 30px;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.open ~ .main-content {
+  margin-left: 220px;
+}
+
+.main-content h1 {
+  color: #000 !important;
+  font-size: 50px;
+}
+
+.main-content p {
+  color: rgba(255, 4, 4, 0.961);
+  font-size: 30px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 8px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.bttn {
+  background-color: #1a252f;
+  align-items: center;
+}
+
+/* BOTÕES CENTRAIS */
+.centralizado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  height: 60vh;
+  flex-wrap: wrap;
+}
+
+.botao-icone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.botao-icone:hover {
+  transform: scale(1.05);
+}
+
+.circulo {
+  background-color: #00c060;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sinal-mais {
+  color: white;
+  font-size: 60px;
+  font-weight: bold;
+  line-height: 0;
+}
+
+.botao-icone p {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #000;
+  text-align: center;
+}
+
+.btn-central:hover {
+  background-color: #056a9c;
+}
+
+/* ============================
+   VER ALUNOS
+=============================== */
+.tabela-alunos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-alunos th, .tabela-alunos td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.tabela-alunos th {
+  background-color: #f2f2f2;
+}
+
+/* ============================
+   CADASTRAR NOTAS
+=============================== */
+.cadastrar-notas-body {
+  background: linear-gradient(135deg, #3b771d, #3e7025);
 }

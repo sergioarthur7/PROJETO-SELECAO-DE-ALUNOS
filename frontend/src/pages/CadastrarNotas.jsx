@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/CadastrarNotas.css';
-import Sidebar from '../components/Sidebar'; // <- Aqui está a importação correta
+import Sidebar from '../components/Sidebar'
+
 
 const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao-de-alunos.vercel.app";
 

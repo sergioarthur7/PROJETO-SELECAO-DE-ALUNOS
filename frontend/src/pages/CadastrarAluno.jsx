@@ -1,8 +1,8 @@
 // src/pages/CadastrarAluno.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/CadastrarAluno.css';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/Sidebar'
+
 
 const CadastrarAluno = () => {
   const [sidebarAberta, setSidebarAberta] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import '../styles/VerAlunos.css'; // Cria esse CSS depois
+import Sidebar from '../components/Sidebar'
+
 
 const VerAlunos = () => {
   const [alunos, setAlunos] = useState([]);
