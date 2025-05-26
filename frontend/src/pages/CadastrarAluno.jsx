@@ -40,7 +40,9 @@ const CadastrarAluno = () => {
       <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
 
       <div className="main-content">
+        <br /><br />
         <h1>Cadastro de Aluno</h1>
+        <br /><br />
         {mensagem && <p>{mensagem}</p>}
         <form onSubmit={handleSubmit} className="formulario-aluno">
           <div className="form-group">
@@ -89,6 +91,7 @@ const CadastrarAluno = () => {
             </select>
           </div>
 
+          
           <button type="submit" className="btn-submit">Próximo</button>
         </form>
       </div>
