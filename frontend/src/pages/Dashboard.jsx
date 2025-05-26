@@ -1,10 +1,7 @@
 // src/pages/Dashboard.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Sidebar from '../components/Sidebar'
-
-
-
+import Sidebar from '../components/Sidebar';
 
 const Dashboard = () => {
   const [sidebarAberta, setSidebarAberta] = useState(false);
@@ -17,24 +14,24 @@ const Dashboard = () => {
       />
 
       <div className="main-content">
-        <h1>Dashboard</h1>
+        <h1 className="dashboard-title">Painel do Gestor</h1>
 
         <div className="centralizado">
-          {/* Botão: Cadastrar Aluno */}
-          <Link to="/cadastrar-aluno" className="botao-icone">
-            <div className="circulo">
-              <span className="sinal-mais">+</span>
-            </div>
-            <p>CADASTRAR ALUNO</p>
+          <Link to="/cadastrar-aluno" className="dashboard-card">
+            <div className="dashboard-icon">📋</div>
+            <p>Cadastrar Aluno</p>
           </Link>
 
-          {/* Botão: Ver Alunos */}
-          <Link to="/ver-alunos" className="botao-icone">
-            <div className="circulo">
-              <span className="sinal-mais">+</span>
-            </div>
-            <p>VER ALUNOS</p>
+          <Link to="/ver-alunos" className="dashboard-card">
+            <div className="dashboard-icon">👨‍🎓</div>
+            <p>Ver Alunos</p>
           </Link>
+
+          <Link to="/ver-alunos" className="dashboard-card">
+            <div className="dashboard-icon">X</div>
+            <p>XXXXX</p>
+          </Link>
+          
         </div>
       </div>
     </div>
