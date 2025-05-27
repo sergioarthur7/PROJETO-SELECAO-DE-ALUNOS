@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar'
+//import Sidebar from '../components/Sidebar'
 
 
 const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao-de-alunos.vercel.app";

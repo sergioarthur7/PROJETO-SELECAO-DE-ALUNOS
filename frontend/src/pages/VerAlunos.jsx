@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar'
 
 const VerAlunos = () => {
   const [alunos, setAlunos] = useState([]);
-  const [sidebarAberta, setSidebarAberta] = useState(false);
+  const [sidebarAberta, setSidebarAberta] = useState(true);
 
   useEffect(() => {
     fetch('https://projeto-selecao-de-alunos.vercel.app/api/alunos') // Altere para sua rota real

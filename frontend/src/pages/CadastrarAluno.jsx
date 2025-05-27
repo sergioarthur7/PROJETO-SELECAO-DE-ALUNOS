@@ -1,11 +1,10 @@
 // src/pages/CadastrarAluno.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar'
-
+import Sidebar from '../components/Sidebar';
 
 const CadastrarAluno = () => {
-  const [sidebarAberta, setSidebarAberta] = useState(false);
+  const [sidebarAberta, setSidebarAberta] = useState(true);
   const navigate = useNavigate();
 
   const [nome, setNome] = useState('');
@@ -13,7 +12,24 @@ const CadastrarAluno = () => {
   const [dataNascimento, setDataNascimento] = useState('');
   const [comprovante, setComprovante] = useState('');
   const [cota, setCota] = useState('');
+  const [cursoSelecionado, setCursoSelecionado] = useState('');
   const [mensagem, setMensagem] = useState('');
+  const [cursos, setCursos] = useState([]);
+
+  // Buscar cursos do banco de dados
+  useEffect(() => {
+    const buscarCursos = async () => {
+      try {
+        const resposta = await fetch('https://SEU_BACKEND_URL/api/cursos'); // ajuste a URL aqui
+        const dados = await resposta.json();
+        setCursos(dados);
+      } catch (erro) {
+        console.error('Erro ao buscar cursos:', erro);
+      }
+    };
+
+    buscarCursos();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,7 +39,8 @@ const CadastrarAluno = () => {
       cpf,
       data_nascimento: dataNascimento,
       comprovante_residencia: comprovante,
-      cota
+      cota,
+      curso: cursoSelecionado,
     };
 
     localStorage.setItem('dadosAluno', JSON.stringify(dadosAluno));
@@ -31,8 +48,8 @@ const CadastrarAluno = () => {
   };
 
   const fazerLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   return (
@@ -44,6 +61,7 @@ const CadastrarAluno = () => {
         <h1>Cadastro de Aluno</h1>
         <br /><br />
         {mensagem && <p>{mensagem}</p>}
+
         <form onSubmit={handleSubmit} className="formulario-aluno">
           <div className="form-group">
             <label>Nome</label>
@@ -53,11 +71,11 @@ const CadastrarAluno = () => {
           <div className="form-group">
             <label>CPF</label>
             <input 
-              type="text" 
-              maxLength="11" 
-              value={cpf} 
-              onChange={e => setCpf(e.target.value)} 
-              required 
+              type="text"
+              maxLength="11"
+              value={cpf}
+              onChange={e => setCpf(e.target.value)}
+              required
               pattern="\d{11}"
               title="Digite um CPF válido (somente números)"
             />
@@ -91,7 +109,16 @@ const CadastrarAluno = () => {
             </select>
           </div>
 
-          
+          <div className="form-group">
+            <label>Curso</label>
+            <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
+              <option value="">Selecione</option>
+              {cursos.map((curso) => (
+                <option key={curso.id} value={curso.sigla}>{curso.nome}</option>
+              ))}
+            </select>
+          </div>
+
           <button type="submit" className="btn-submit">Próximo</button>
         </form>
       </div>
