@@ -57,9 +57,9 @@ const CadastrarAluno = () => {
       <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
 
       <div className="main-content">
-        <br /><br />
+        <br />
         <h1>Cadastro de Aluno</h1>
-        <br /><br />
+        <br />
         {mensagem && <p>{mensagem}</p>}
 
         <form onSubmit={handleSubmit} className="formulario-aluno">

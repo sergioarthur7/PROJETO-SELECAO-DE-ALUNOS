@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import { UserPlus, GraduationCap, Users, FileText } from 'lucide-react';
 
 const Dashboard = () => {
   const [sidebarAberta, setSidebarAberta] = useState(true);
@@ -18,25 +19,32 @@ const Dashboard = () => {
 
         <div className="centralizado">
           <Link to="/cadastrar-aluno" className="dashboard-card">
-  <div className="dashboard-icon">➕</div>
-  <p>Cadastrar Aluno</p>
-</Link>
+            <div className="dashboard-icon">
+              <UserPlus size={64} />
+            </div>
+            <p>Cadastrar Aluno</p>
+          </Link>
 
-<Link to="/ver-alunos" className="dashboard-card">
-  <div className="dashboard-icon">🏫</div>
-  <p>Ver Alunos</p>
-</Link>
+          <Link to="/ver-alunos" className="dashboard-card">
+            <div className="dashboard-icon">
+              <Users size={64} />
+            </div>
+            <p>Ver Alunos</p>
+          </Link>
 
-<Link to="/voltar" className="dashboard-card">
-  <div className="dashboard-icon">🎓</div>
-  <p>Cursos</p>
-</Link>
+          <Link to="/voltar" className="dashboard-card">
+            <div className="dashboard-icon">
+              <GraduationCap size={64} />
+            </div>
+            <p>Cursos</p>
+          </Link>
 
-<Link to="/relatorio" className="dashboard-card">
-  <div className="dashboard-icon">📄</div>
-  <p>Relatórios</p>
-</Link>
-          
+          <Link to="/relatorio" className="dashboard-card">
+            <div className="dashboard-icon">
+              <FileText size={64} />
+            </div>
+            <p>Relatórios</p>
+          </Link>
         </div>
       </div>
     </div>
