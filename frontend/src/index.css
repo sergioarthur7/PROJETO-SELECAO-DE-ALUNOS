@@ -93,79 +93,105 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* ============================
-   LOGIN
-=============================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Corpo da página */
 body {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #3b771d;
-  background-image: url(src/assets/bg-header.jpg);
+  background: #2a4d1f url('/src/assets/bg-header.jpg');
   background-size: 100%;
 }
 
+/* Container do login */
 .container {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  padding: 30px 25px;
+  width: 320px;
   text-align: center;
 }
 
+/* Logotipo */
 .logo img {
   width: 80px;
-  margin-bottom: 15px;
-}
-
-h2 {
   margin-bottom: 20px;
-  color: #333;
 }
 
+/* Título */
+h2 {
+  color: #222;
+  margin-bottom: 20px;
+}
+
+/* Agrupamento dos inputs */
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   text-align: left;
 }
 
+/* Label dos campos */
 .input-group label {
-  display: block;
   font-size: 14px;
-  margin-bottom: 5px;
-  color: #000000;
-  font-weight: bold;
+  color: #333;
+  margin-bottom: 6px;
+  display: block;
+  font-weight: bolder;
 }
 
+/* Campos de entrada */
 .input-group input {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
+  transition: border 0.3s;
 }
 
+.input-group input:focus {
+  border-color: #309e1a;
+  outline: none;
+}
+
+/* Link de recuperação */
+.input-group a {
+  font-size: 14px;
+  color: #0c8bdf;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.input-group a:hover {
+  text-decoration: underline;
+}
+
+/* Botão de login */
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #309e1a;
   color: white;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: bold;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #46ce1d;
+  background-color: #3ecf1d;
 }
-
 /* ============================
    SIDEBAR GERAL
 =============================== */

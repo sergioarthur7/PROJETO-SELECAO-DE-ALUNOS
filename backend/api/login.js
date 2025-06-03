@@ -1,10 +1,18 @@
-import db from '../db.js';
+import getConnection from '../db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://projeto-selecao-de-alunos.vercel.app'
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -16,13 +24,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ mensagem: 'Método não permitido.' });
   }
 
-  const { cpf, senha } = req.body;
   const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
+  const { cpf, senha } = req.body;
 
   try {
-    const [results] = await db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf]);
+    const connection = await getConnection();
+    const [results] = await connection.execute("SELECT * FROM gestores WHERE cpf = ?", [cpf]);
 
-    if (results.length === 0) {
+    if (!results.length) {
       return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
     }
 
@@ -37,7 +46,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ mensagem: "Login bem-sucedido!", token });
 
   } catch (erro) {
-    console.error("Erro ao processar login:", erro);
-    return res.status(500).json({ mensagem: "Erro interno no servidor.", erro: erro.message });
+    console.error("Erro no login:", erro);
+    return res.status(500).json({ mensagem: "Erro no servidor.", erro: erro.message });
   }
 }
