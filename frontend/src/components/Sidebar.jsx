@@ -34,7 +34,7 @@ const Sidebar = () => {
 
       <div className={`sidebar ${isMobile && !sidebarOpen ? 'recolhida' : 'open'}`}>
         <div>
-          <div className="sidebar-logo">Painel</div>
+          <div className="sidebar-logo">Bem vindo!</div>
 
           <nav className="sidebar-menu">
             <NavLink to="/dashboard" className="sidebar-item">
@@ -51,6 +51,17 @@ const Sidebar = () => {
               <UserPlus size={20} />
               Cadastrar Aluno
             </NavLink>
+
+            <NavLink to="/cursos" className="sidebar-item">
+              <UserPlus size={20} />
+              Cursos
+            </NavLink>
+          
+            <NavLink to="/conta" className="sidebar-item">
+              <UserPlus size={20} />
+              Conta
+            </NavLink>
+            
           </nav>
         </div>
 

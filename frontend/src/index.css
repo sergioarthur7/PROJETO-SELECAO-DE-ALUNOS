@@ -190,7 +190,7 @@ button:hover {
   font-weight: bold;
   text-align: center;
   margin-bottom: 2rem;
-  color: #078fd6;
+  color: #27c512;
 }
 
 .sidebar-menu {
@@ -240,7 +240,7 @@ button:hover {
 }
 
 .sidebar-footer .logout-link:hover {
-  background-color: #078fd6;
+  background-color: #d61507;
 }
 
 
