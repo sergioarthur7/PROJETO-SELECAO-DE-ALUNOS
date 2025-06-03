@@ -5,8 +5,7 @@ import jwt from 'jsonwebtoken';
 export default async function handler(req, res) {
   const allowedOrigins = [
   'http://localhost:5173',
-  'https://projeto-selecao.vercel.app', // frontend
-  'https://projeto-selecao-de-alunos.vercel.app', // backend (caso queira chamadas internas)
+  'https://projeto-selecao-de-alunos.vercel.app'
 ];
 
 const origin = req.headers.origin;
@@ -20,6 +19,7 @@ res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 if (req.method === 'OPTIONS') {
   return res.status(200).end();
 }
+
 
   if (req.method !== 'POST') {
     return res.status(405).json({ mensagem: 'Método não permitido.' });
