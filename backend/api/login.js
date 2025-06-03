@@ -3,23 +3,25 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
-  // CORS
+  // CORS - deve ser tratado ANTES de tudo
   const allowedOrigins = [
     'https://projeto-selecao-de-alunos.vercel.app',
     'https://projeto-selecao-de-alunos-3rsc.vercel.app',
     'http://localhost:5173',
   ];
 
-  const origin = req.headers.origin;
+  const origin = req.headers.origin || '';
+
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end(); // Preflight
+    return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
@@ -42,8 +44,7 @@ export default async function handler(req, res) {
 
     const gestor = rows[0];
 
-    // Comparar a senha (se for bcrypt), senão use senha direta
-    const senhaCorreta = await bcrypt.compare(senha, gestor.senha); // ou: senha === gestor.senha
+    const senhaCorreta = await bcrypt.compare(senha, gestor.senha);
 
     if (!senhaCorreta) {
       return res.status(401).json({ mensagem: 'Senha incorreta.' });
