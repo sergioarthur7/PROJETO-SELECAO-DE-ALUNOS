@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // ✅ Usa URL pública da Vercel por padrão
-const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao.vercel.app";
+const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao-de-alunos.vercel.app";
 
 const Login = () => {
   const [cpf, setCpf] = useState('');
