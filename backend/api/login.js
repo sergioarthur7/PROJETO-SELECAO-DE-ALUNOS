@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
-  // 🔧 Cabeçalhos de CORS
+  // CORS
   const allowedOrigins = [
     'https://projeto-selecao-de-alunos.vercel.app',
     'https://projeto-selecao-de-alunos-3rsc.vercel.app',
@@ -19,11 +19,41 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end(); // resposta para preflight
+    return res.status(200).end(); // Preflight
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ mensagem: 'Método não permitido' });
   }
 
   try {
-    // 👇 ...sua lógica normal do login aqui
+    const { cpf, senha } = req.body;
+
+    if (!cpf || !senha) {
+      return res.status(400).json({ mensagem: 'CPF e senha são obrigatórios.' });
+    }
+
+    const connection = await getConnection();
+    const [rows] = await connection.execute('SELECT * FROM gestores WHERE cpf = ?', [cpf]);
+
+    if (rows.length === 0) {
+      return res.status(401).json({ mensagem: 'Gestor não encontrado.' });
+    }
+
+    const gestor = rows[0];
+
+    // Comparar a senha (se for bcrypt), senão use senha direta
+    const senhaCorreta = await bcrypt.compare(senha, gestor.senha); // ou: senha === gestor.senha
+
+    if (!senhaCorreta) {
+      return res.status(401).json({ mensagem: 'Senha incorreta.' });
+    }
+
+    const token = jwt.sign({ id: gestor.id, cpf: gestor.cpf }, process.env.JWT_SECRET || 'segredo', {
+      expiresIn: '2h',
+    });
+
+    res.status(200).json({ token, nome: gestor.nome });
   } catch (err) {
     console.error('Erro interno:', err);
     res.status(500).json({ erro: 'Erro interno no servidor.' });
