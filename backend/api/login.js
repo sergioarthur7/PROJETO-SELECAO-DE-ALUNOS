@@ -1,9 +1,9 @@
-import getConnection from '../db.js';
+import getConnection from '../db.js'; // Caminho relativo correto
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
-  // CORS - deve ser tratado ANTES de tudo
+  // CORS
   const allowedOrigins = [
     'https://projeto-selecao-de-alunos.vercel.app',
     'https://projeto-selecao-de-alunos-3rsc.vercel.app',
@@ -11,7 +11,6 @@ export default async function handler(req, res) {
   ];
 
   const origin = req.headers.origin || '';
-
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -56,7 +55,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ token, nome: gestor.nome });
   } catch (err) {
-    console.error('Erro interno:', err);
+    console.error('Erro no login.js:', err);
     res.status(500).json({ erro: 'Erro interno no servidor.' });
   }
 }
