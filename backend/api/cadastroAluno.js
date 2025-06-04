@@ -1,37 +1,30 @@
-const db = require('../db');
+const express = require('express');
+const router = express.Router();
+const db = require('../db');  // Conexão com o banco de dados
 
-module.exports = (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+router.post("/", (req, res) => {
+  console.log("Recebido no cadastro:", req.body); // Verifique aqui o valor de media_final
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  const { nome, cpf, data_nascimento, comprovante_residencia, media_final } = req.body;
 
-  if (req.method === 'POST') {
-    const {
-      cpf, nome, data_nascimento, comprovante_residencia, media_final
-    } = req.body;
+  // Garantir que a média final seja um número
+ 
+ 
 
-    if (!cpf || !nome || !data_nascimento || !comprovante_residencia || isNaN(media_final)) {
-      return res.status(400).json({ mensagem: "Dados inválidos ou incompletos." });
+  const query = `
+    INSERT INTO alunos (nome, cpf, data_nascimento, comprovante_residencia, media_final)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(query, [nome, cpf, data_nascimento, comprovante_residencia, media_final], (err, result) => {
+    if (err) {
+      console.error("Erro ao cadastrar aluno:", err);
+      return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
     }
 
-    const insertAluno = `
-      INSERT INTO alunos (cpf, nome, data_nascimento, comprovante_residencia, media_final)
-      VALUES (?, ?, ?, ?, ?)
-    `;
+    res.status(201).json({ mensagem: "Aluno cadastrado com sucesso!", alunoId: result.insertId });
+  });
+});
 
-    db.query(insertAluno, [cpf, nome, data_nascimento, comprovante_residencia, media_final], (err, result) => {
-      if (err) {
-        console.error("Erro ao inserir aluno:", err);
-        return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
-      }
 
-      return res.status(200).json({ mensagem: "Aluno cadastrado com sucesso." });
-    });
-  } else {
-    return res.status(405).json({ mensagem: "Método não suportado." });
-  }
-};
+module.exports = router;

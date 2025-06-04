@@ -1,61 +1,41 @@
-import getConnection from '../db.js'; // Caminho relativo correto
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+const db = require('../db'); // conexão com MySQL
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-export default async function handler(req, res) {
-  // CORS
-  const allowedOrigins = [
-    'https://projeto-selecao-de-alunos.vercel.app',
-    'https://projeto-selecao-de-alunos-3rsc.vercel.app',
-    'http://localhost:5173',
-  ];
+const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
-  const origin = req.headers.origin || '';
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ mensagem: 'Método não permitido' });
   }
 
-  try {
-    const { cpf, senha } = req.body;
+  const { cpf, senha } = req.body;
 
-    if (!cpf || !senha) {
-      return res.status(400).json({ mensagem: 'CPF e senha são obrigatórios.' });
+  db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf], async (err, results) => {
+    if (err) {
+      console.error("Erro no SELECT da tabela 'gestores':", err);
+      return res.status(500).json({ mensagem: "Erro no servidor ao buscar gestor.", erro: err.message });
     }
 
-    const connection = await getConnection();
-    const [rows] = await connection.execute('SELECT * FROM gestores WHERE cpf = ?', [cpf]);
+    const usuario = results[0];
 
-    if (rows.length === 0) {
-      return res.status(401).json({ mensagem: 'Gestor não encontrado.' });
+    if (!usuario) {
+      return res.status(401).json({ mensagem: "CPF ou senha incorretos (usuário não encontrado)." });
     }
 
-    const gestor = rows[0];
+    try {
+      const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
-    const senhaCorreta = await bcrypt.compare(senha, gestor.senha);
+      if (!senhaCorreta) {
+        return res.status(401).json({ mensagem: "CPF ou senha incorretos (senha inválida)." });
+      }
 
-    if (!senhaCorreta) {
-      return res.status(401).json({ mensagem: 'Senha incorreta.' });
+      const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
+      return res.json({ mensagem: "Login bem-sucedido!", token });
+
+    } catch (erroComparacao) {
+      console.error("Erro ao comparar a senha:", erroComparacao);
+      return res.status(500).json({ mensagem: "Erro interno ao verificar senha.", erro: erroComparacao.message });
     }
-
-    const token = jwt.sign({ id: gestor.id, cpf: gestor.cpf }, process.env.JWT_SECRET || 'segredo', {
-      expiresIn: '2h',
-    });
-
-    res.status(200).json({ token, nome: gestor.nome });
-  } catch (err) {
-    console.error('Erro no login.js:', err);
-    res.status(500).json({ erro: 'Erro interno no servidor.' });
-  }
-}
+  });
+};
