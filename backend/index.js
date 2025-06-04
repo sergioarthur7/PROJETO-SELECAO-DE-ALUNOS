@@ -19,10 +19,16 @@ const cadastroAlunoRoutes = require("./routes/cadastroAluno");
 app.use(express.json());
 app.use(
   cors({
-    origin: "*", // Libera para qualquer origem na Vercel (ajustável)
+    origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app", // Domínio do frontend
     credentials: true,
   })
 );
+
+app.options("*", cors({
+  origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app",
+  credentials: true,
+}));
+
 
 // Serve arquivos estáticos (caso precise)
 app.use(express.static(path.join(__dirname, "public")));
