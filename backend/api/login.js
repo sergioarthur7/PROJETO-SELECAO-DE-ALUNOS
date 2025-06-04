@@ -1,41 +1,49 @@
-const db = require('../db'); // conexão pool
-const bcrypt = require('bcryptjs'); // usar bcryptjs!
-const jwt = require('jsonwebtoken');
+import getConnection from '../db.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ mensagem: 'Método não permitido' });
   }
 
   const { cpf, senha } = req.body;
 
+  let connection;
+
   try {
-    db.query("SELECT * FROM gestores WHERE cpf = ?", [cpf], async (err, results) => {
-      if (err) {
-        console.error("Erro no SELECT da tabela 'gestores':", err);
-        return res.status(500).json({ mensagem: "Erro no servidor ao buscar gestor." });
-      }
+    connection = await getConnection();
 
-      const usuario = results[0];
+    const [results] = await connection.execute(
+      "SELECT * FROM gestores WHERE cpf = ?",
+      [cpf]
+    );
 
-      if (!usuario) {
-        return res.status(401).json({ mensagem: "CPF ou senha incorretos (usuário não encontrado)." });
-      }
+    const usuario = results[0];
 
-      const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+    if (!usuario) {
+      return res.status(401).json({ mensagem: "CPF ou senha incorretos (usuário não encontrado)." });
+    }
 
-      if (!senhaCorreta) {
-        return res.status(401).json({ mensagem: "CPF ou senha incorretos (senha inválida)." });
-      }
+    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
-      const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
+    if (!senhaCorreta) {
+      return res.status(401).json({ mensagem: "CPF ou senha incorretos (senha inválida)." });
+    }
 
-      return res.status(200).json({ mensagem: "Login bem-sucedido!", token });
-    });
-  } catch (erro) {
-    console.error("Erro geral no login:", erro);
-    return res.status(500).json({ mensagem: "Erro interno no servidor." });
+    const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
+
+    return res.status(200).json({ mensagem: "Login bem-sucedido!", token });
+
+  } catch (err) {
+    console.error("Erro no login:", err);
+    return res.status(500).json({ mensagem: "Erro interno no servidor", erro: err.message });
+
+  } finally {
+    if (connection) {
+      await connection.end(); // ← FECHAR a conexão!
+    }
   }
-};
+}
