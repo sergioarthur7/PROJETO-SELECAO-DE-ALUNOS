@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
+/**
+ * Vercel handler para login de gestores
+ */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ mensagem: 'Método não permitido' });
@@ -17,33 +20,37 @@ export default async function handler(req, res) {
     connection = await getConnection();
 
     const [results] = await connection.execute(
-      "SELECT * FROM gestores WHERE cpf = ?",
+      'SELECT * FROM gestores WHERE cpf = ?',
       [cpf]
     );
 
     const usuario = results[0];
 
     if (!usuario) {
-      return res.status(401).json({ mensagem: "CPF ou senha incorretos (usuário não encontrado)." });
+      return res
+        .status(401)
+        .json({ mensagem: 'CPF ou senha incorretos (usuário não encontrado).' });
     }
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
     if (!senhaCorreta) {
-      return res.status(401).json({ mensagem: "CPF ou senha incorretos (senha inválida)." });
+      return res
+        .status(401)
+        .json({ mensagem: 'CPF ou senha incorretos (senha inválida).' });
     }
 
-    const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign({ cpf }, SECRET_KEY, { expiresIn: '1h' });
 
-    return res.status(200).json({ mensagem: "Login bem-sucedido!", token });
-
+    return res.status(200).json({ mensagem: 'Login bem-sucedido!', token });
   } catch (err) {
-    console.error("Erro no login:", err);
-    return res.status(500).json({ mensagem: "Erro interno no servidor", erro: err.message });
-
+    console.error('Erro no login:', err);
+    return res
+      .status(500)
+      .json({ mensagem: 'Erro interno no servidor', erro: err.message });
   } finally {
     if (connection) {
-      await connection.end(); // ← FECHAR a conexão!
+      await connection.end();
     }
   }
 }
