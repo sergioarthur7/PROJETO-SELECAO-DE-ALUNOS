@@ -15,10 +15,12 @@ const cadastroAlunoRoutes = require("./routes/cadastroAluno");
 
 // Middleware global
 app.use(express.json());
-app.use(cors({
-  origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app", // ✅ esse domínio está correto
+    credentials: true,
+  })
+);
 
 // Arquivos estáticos (caso precise usar futuramente)
 app.use(express.static(path.join(__dirname, "public")));
