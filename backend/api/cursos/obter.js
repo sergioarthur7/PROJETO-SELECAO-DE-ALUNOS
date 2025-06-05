@@ -1,5 +1,4 @@
-// 📁 backend/api/cursos/obter.js
-import { db } from '../bd';
+import { db } from '../../bd';
 
 const COLUNA_CURSO = 'Curso';
 
@@ -15,12 +14,16 @@ export default async function handler(req, res) {
     }
 
     const enumDef = rows[0].Type; // ex: enum('ENG','MAT','BIO')
-    const cursos = enumDef
-      .replace(/^enum\(|\)$/g, '')
-      .split(',')
-      .map(c => c.replace(/'/g, ''));
 
-    res.status(200).json(cursos);
+    if (!enumDef.startsWith('enum(')) {
+      return res.status(400).json({ erro: 'Coluna não é do tipo enum' });
+    }
+
+    const enumValues = enumDef.replace(/^enum\((.*)\)$/, '$1')
+                              .split(',')
+                              .map(c => c.replace(/'/g, ''));
+
+    res.status(200).json(enumValues);
   } catch (err) {
     console.error('Erro ao obter cursos:', err);
     res.status(500).json({ erro: 'Erro ao obter cursos' });
