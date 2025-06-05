@@ -1,8 +1,5 @@
-// backend/api/index.js
-
 const express = require("express");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 require("dotenv").config();
@@ -10,50 +7,41 @@ require("dotenv").config();
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || "sua_chave_secreta";
 
+// Banco de dados e rotas
 const db = require("./db");
 const loginRoutes = require("./routes/login");
 const gestoresRoutes = require("./routes/gestores");
 const cadastroAlunoRoutes = require("./routes/cadastroAluno");
 
-// Middleware
+// Middleware global
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app", // Domínio do frontend
-    credentials: true,
-  })
-);
-
-app.options("*", cors({
+app.use(cors({
   origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app",
   credentials: true,
 }));
 
-
-// Serve arquivos estáticos (caso precise)
+// Arquivos estáticos (caso precise usar futuramente)
 app.use(express.static(path.join(__dirname, "public")));
 
-// Rotas
+// Rotas principais
 app.use("/", loginRoutes);
 app.use("/gestores", gestoresRoutes);
 app.use("/alunos", cadastroAlunoRoutes);
 
-// Middleware de autenticação
+// Middleware para proteger rotas com token JWT
 const verificarToken = (req, res, next) => {
-  const token = req.headers["authorization"];
-  if (!token)
-    return res.status(403).json({ mensagem: "Token não fornecido." });
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) return res.status(403).json({ mensagem: "Token não fornecido." });
 
-  const tokenSemPrefixo = token.split(" ")[1]; // remove o "Bearer "
-
-  jwt.verify(tokenSemPrefixo, SECRET_KEY, (err, decoded) => {
+  const token = authHeader.split(" ")[1]; // Ex: "Bearer TOKEN"
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) return res.status(401).json({ mensagem: "Token inválido." });
     req.cpf = decoded.cpf;
     next();
   });
 };
 
-// Rota protegida: buscar alunos com médias
+// Rota protegida: buscar alunos com médias calculadas
 app.get("/alunos", verificarToken, (req, res) => {
   const query = `
     SELECT a.nome, a.cpf, 
@@ -69,12 +57,11 @@ app.get("/alunos", verificarToken, (req, res) => {
       console.error("Erro ao buscar alunos:", err);
       return res.status(500).json({ mensagem: "Erro ao buscar alunos." });
     }
-
     res.json(results);
   });
 });
 
-// Rota para cadastrar aluno com média final
+// Rota pública: cadastrar aluno com média final (sem login)
 app.post("/alunos", (req, res) => {
   const {
     cpf,
@@ -84,14 +71,7 @@ app.post("/alunos", (req, res) => {
     media_final,
   } = req.body;
 
-  if (
-    !cpf ||
-    !nome ||
-    !data_nascimento ||
-    !comprovante_residencia ||
-    media_final === undefined ||
-    isNaN(media_final)
-  ) {
+  if (!cpf || !nome || !data_nascimento || !comprovante_residencia || isNaN(media_final)) {
     return res.status(400).json({ mensagem: "Dados inválidos ou incompletos." });
   }
 
@@ -100,19 +80,14 @@ app.post("/alunos", (req, res) => {
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  db.query(
-    sql,
-    [cpf, nome, data_nascimento, comprovante_residencia, media_final],
-    (err, result) => {
-      if (err) {
-        console.error("Erro ao inserir aluno:", err);
-        return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
-      }
-
-      res.status(200).json({ mensagem: "Aluno cadastrado com sucesso." });
+  db.query(sql, [cpf, nome, data_nascimento, comprovante_residencia, media_final], (err) => {
+    if (err) {
+      console.error("Erro ao inserir aluno:", err);
+      return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
     }
-  );
+    res.status(200).json({ mensagem: "Aluno cadastrado com sucesso." });
+  });
 });
 
-// ✅ Exporta o app para a Vercel usar como Serverless Function
+// Exporta para a Vercel (serverless)
 module.exports = app;
