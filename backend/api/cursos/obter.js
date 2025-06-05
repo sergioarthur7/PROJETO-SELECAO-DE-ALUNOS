@@ -1,10 +1,11 @@
+// 📁 backend/api/cursos/obter.js
 import { db } from '../bd';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const [rows] = await db.query("SHOW COLUMNS FROM alunos LIKE 'Curso'");
-      const enumDef = rows[0].Type; // ex: enum('ADS','TI','ADM')
+      const enumDef = rows[0].Type;
       const cursos = enumDef
         .replace(/^enum\(|\)$/g, '')
         .split(',')
@@ -12,6 +13,7 @@ export default async function handler(req, res) {
 
       res.status(200).json(cursos);
     } catch (err) {
+      console.error('Erro ao obter cursos:', err);
       res.status(500).json({ erro: 'Erro ao obter cursos' });
     }
   } else {

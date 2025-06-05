@@ -524,3 +524,71 @@ button:hover {
 .cadastrar-notas-body {
   background: linear-gradient(135deg, #3b771d, #3e7025);
 }
+
+
+/* ============================
+   CURSOS
+=============================== */
+
+.inline-form {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.inline-form input[type="text"] {
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.inline-form input[name="nome"] {
+  flex: 2;
+}
+
+.inline-form input[name="sigla"] {
+  flex: 1;
+}
+
+.btn-add {
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  background-color: #049444;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-salvar {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  background-color: #078fd6;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.lista-cursos h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.lista-cursos ul {
+  padding-left: 1.5rem;
+}
+
+.lista-cursos li {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
