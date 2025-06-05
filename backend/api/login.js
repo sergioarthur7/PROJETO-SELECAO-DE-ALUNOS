@@ -2,6 +2,19 @@ import getConnection from '../db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+
+if (req.method === 'OPTIONS') {
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "https://projeto-selecao-de-alunos-kz1q.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  return res.status(200).end();
+}
+
+res.setHeader("Access-Control-Allow-Credentials", "true");
+res.setHeader("Access-Control-Allow-Origin", "https://projeto-selecao-de-alunos-kz1q.vercel.app");
+
+
 const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
 /**
