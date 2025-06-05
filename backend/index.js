@@ -1,41 +1,46 @@
-const express = require("express");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const path = require("path");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import jwt from "jsonwebtoken";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+import serverless from "serverless-http";
 
+dotenv.config();
+
+// Variáveis e inicializações
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || "sua_chave_secreta";
 
+// Helpers para resolver __dirname com ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Banco de dados e rotas
-const db = require("./db");
-const loginRoutes = require("./routes/login");
-const gestoresRoutes = require("./routes/gestores");
-const cadastroAlunoRoutes = require("./routes/cadastroAluno");
+import db from "../db.js";
+import loginRoutes from "../routes/login.js";
+import gestoresRoutes from "../routes/gestores.js";
+import cadastroAlunoRoutes from "../routes/cadastroAluno.js";
 
-// Middleware global
+// Middlewares
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app", // ✅ esse domínio está correto
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app",
+  credentials: true,
+}));
+app.use(express.static(path.join(__dirname, "../public")));
 
-// Arquivos estáticos (caso precise usar futuramente)
-app.use(express.static(path.join(__dirname, "public")));
-
-// Rotas principais
+// Rotas externas
 app.use("/", loginRoutes);
 app.use("/gestores", gestoresRoutes);
 app.use("/alunos", cadastroAlunoRoutes);
 
-// Middleware para proteger rotas com token JWT
+// Middleware para proteger rotas com JWT
 const verificarToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader) return res.status(403).json({ mensagem: "Token não fornecido." });
 
-  const token = authHeader.split(" ")[1]; // Ex: "Bearer TOKEN"
+  const token = authHeader.split(" ")[1];
   jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) return res.status(401).json({ mensagem: "Token inválido." });
     req.cpf = decoded.cpf;
@@ -43,7 +48,7 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-// Rota protegida: buscar alunos com médias calculadas
+// Rota protegida: buscar alunos com médias
 app.get("/alunos", verificarToken, (req, res) => {
   const query = `
     SELECT a.nome, a.cpf, 
@@ -63,15 +68,9 @@ app.get("/alunos", verificarToken, (req, res) => {
   });
 });
 
-// Rota pública: cadastrar aluno com média final (sem login)
+// Rota pública: cadastrar aluno com média final
 app.post("/alunos", (req, res) => {
-  const {
-    cpf,
-    nome,
-    data_nascimento,
-    comprovante_residencia,
-    media_final,
-  } = req.body;
+  const { cpf, nome, data_nascimento, comprovante_residencia, media_final } = req.body;
 
   if (!cpf || !nome || !data_nascimento || !comprovante_residencia || isNaN(media_final)) {
     return res.status(400).json({ mensagem: "Dados inválidos ou incompletos." });
@@ -91,5 +90,5 @@ app.post("/alunos", (req, res) => {
   });
 });
 
-// Exporta para a Vercel (serverless)
-module.exports = app;
+// 🔁 Exportação como função Serverless
+export default serverless(app);
