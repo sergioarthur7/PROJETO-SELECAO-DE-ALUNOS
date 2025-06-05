@@ -25,7 +25,7 @@ import cadastroAlunoRoutes from "../routes/cadastroAluno.js";
 // Middlewares
 app.use(express.json());
 app.use(cors({
-  origin: "https://projeto-selecao-de-alunos-kz1q.vercel.app",
+  origin: "localhost:5173",
   credentials: true,
 }));
 app.use(express.static(path.join(__dirname, "../public")));
