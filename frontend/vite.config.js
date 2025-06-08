@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/alunos': 'http://localhost:3000',
-      '/login': 'http://localhost:3000',
+      '/login': 'https://projeto-selecao-de-alunos.vercel.app/api/login',
       '/gestores': 'http://localhost:3000'
     }
   }
