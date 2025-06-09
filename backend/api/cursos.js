@@ -1,12 +1,15 @@
-// backend/routes/cursos.js
+// backend/api/cursos.js
 import express from 'express';
-import db from '../db.js';
+import getConnection from '../db.js';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+  let connection;
   try {
-    const [rows] = await db.query("SHOW COLUMNS FROM alunos LIKE 'Curso'");
+    connection = await getConnection();
+
+    const [rows] = await connection.query("SHOW COLUMNS FROM alunos LIKE 'Curso'");
 
     if (rows.length === 0) {
       return res.status(404).json({ erro: 'Coluna Curso não encontrada.' });
@@ -26,9 +29,13 @@ router.get('/', async (req, res) => {
     }));
 
     res.status(200).json(cursosFormatados);
+
   } catch (err) {
     console.error('Erro ao obter cursos:', err);
     res.status(500).json({ erro: 'Erro ao obter cursos' });
+
+  } finally {
+    if (connection) await connection.end();
   }
 });
 
