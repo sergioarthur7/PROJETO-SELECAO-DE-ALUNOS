@@ -5,12 +5,10 @@ import jwt from 'jsonwebtoken';
 const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
 export default async function handler(req, res) {
-  // 🔒 CORS Headers
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // 🔁 Se for uma requisição OPTIONS (pré-vôo), encerra aqui
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }

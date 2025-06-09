@@ -10,34 +10,29 @@ import serverless from "serverless-http";
 
 dotenv.config();
 
-// Variáveis e inicializações
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || "sua_chave_secreta";
 
-// Helpers para resolver __dirname com ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Banco de dados e rotas
 import db from "../db.js";
 import loginRoutes from "../routes/login.js";
 import gestoresRoutes from "../routes/gestores.js";
 import cadastroAlunoRoutes from "../routes/cadastroAluno.js";
 
-// Middlewares
 app.use(express.json());
 app.use(cors({
-  origin: "localhost:5173",
+  origin: ["http://localhost:5173", "https://projeto-selecao-de-alunos.vercel.app"],
   credentials: true,
 }));
+
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Rotas externas
 app.use("/", loginRoutes);
 app.use("/gestores", gestoresRoutes);
 app.use("/alunos", cadastroAlunoRoutes);
 
-// Middleware para proteger rotas com JWT
 const verificarToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader) return res.status(403).json({ mensagem: "Token não fornecido." });
@@ -50,7 +45,6 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-// Rota protegida: buscar alunos com médias
 app.get("/alunos", verificarToken, (req, res) => {
   const query = `
     SELECT a.nome, a.cpf, 
@@ -70,7 +64,6 @@ app.get("/alunos", verificarToken, (req, res) => {
   });
 });
 
-// Rota pública: cadastrar aluno com média final
 app.post("/alunos", (req, res) => {
   const { cpf, nome, data_nascimento, comprovante_residencia, media_final } = req.body;
 
@@ -92,5 +85,4 @@ app.post("/alunos", (req, res) => {
   });
 });
 
-// 🔁 Exportação como função Serverless
 export default serverless(app);
