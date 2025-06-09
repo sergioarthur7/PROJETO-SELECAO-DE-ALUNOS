@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
       return res.status(404).json({ erro: 'Coluna Curso não encontrada.' });
     }
 
-    const enumDef = rows[0].Type; // ex: enum('Curso1','Curso2','Curso3')
+    const enumDef = rows[0].Type; 
 
     const cursos = enumDef
       .replace(/^enum\(/, '')

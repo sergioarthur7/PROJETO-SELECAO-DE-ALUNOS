@@ -20,7 +20,7 @@ const CadastrarAluno = () => {
   useEffect(() => {
     const buscarCursos = async () => {
       try {
-        const resposta = await fetch('https://projeto-selecao-de-alunos.vercel.app/api/cursos'); // ajuste a URL aqui
+        const resposta = await fetch('https://projeto-selecao-de-alunos.vercel.app/api/cursos');
         const dados = await resposta.json();
         setCursos(dados);
       } catch (erro) {
@@ -110,15 +110,15 @@ const CadastrarAluno = () => {
           </div>
 
           <div className="form-group">
-            <label>Curso</label>
-            <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
-  <option value="">Selecione</option>
-  {cursos.map((curso) => (
-    <option key={curso.id} value={curso.id}>{curso.nome}</option>
-  ))}
-</select>
+  <label>Curso</label>
+  <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
+    <option value="">Selecione</option>
+    <option value="Curso1">Curso1</option>
+    <option value="Curso2">Curso2</option>
+    <option value="Curso3">Curso3</option>
+  </select>
+</div>
 
-          </div>
 
           <button type="submit" className="btn-submit">Próximo</button>
         </form>
