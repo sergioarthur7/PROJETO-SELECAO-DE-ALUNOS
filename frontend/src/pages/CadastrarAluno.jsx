@@ -20,7 +20,7 @@ const CadastrarAluno = () => {
   useEffect(() => {
     const buscarCursos = async () => {
       try {
-        const resposta = await fetch('https://SEU_BACKEND_URL/api/cursos'); // ajuste a URL aqui
+        const resposta = await fetch('https://projeto-selecao-de-alunos.vercel.app/api/cursos'); // ajuste a URL aqui
         const dados = await resposta.json();
         setCursos(dados);
       } catch (erro) {

@@ -1,4 +1,4 @@
-import getConnection from '../db.js';
+import getConnection from '../db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 

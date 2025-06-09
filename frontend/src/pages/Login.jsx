@@ -12,27 +12,27 @@ const Login = () => {
 
     const cpfLimpo = cpf.replace(/\D/g, '');
 
-    fetch(`${API_URL}/api/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ cpf: cpfLimpo, senha }),
-    })
-      .then((res) => res.json())
-      .then((dados) => {
-        if (dados.token) {
-          localStorage.setItem('token', dados.token);
-          alert('Login bem-sucedido!');
-          window.location.href = '/dashboard'; // ou use o react-router
-        } else {
-          alert(dados.mensagem || 'Falha no login.');
-        }
-      })
-      .catch((erro) => {
-        console.error('Erro na requisição:', erro);
-        alert('Erro de conexão com o servidor.');
-      });
+fetch(`${API_URL}/api/login`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ cpf: cpfLimpo, senha }),
+})
+  .then(async (res) => {
+    const data = await res.json();
+    console.log("Resposta da API:", data);
+    if (!res.ok) {
+      throw new Error(data.mensagem || "Erro desconhecido");
+    }
+    localStorage.setItem('token', data.token);
+    alert('Login bem-sucedido!');
+    window.location.href = '/dashboard';
+  })
+  .catch((erro) => {
+    console.error('Erro na requisição:', erro);
+    alert('Erro de conexão ou autenticação.');
+  });
   };
 
   return (

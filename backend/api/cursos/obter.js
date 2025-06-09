@@ -1,6 +1,7 @@
 import { getDb } from '../../db';
 
 export default async function handler(req, res) {
+  // Configura CORS para permitir requisição do frontend
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -14,28 +15,28 @@ export default async function handler(req, res) {
   }
 
   try {
-    const db = await getDb(); // <- nova forma de conectar
+    const db = await getDb();
 
     const [rows] = await db.query("SHOW COLUMNS FROM alunos LIKE 'Curso'");
     if (!rows.length) {
-      console.error('Coluna Curso não encontrada no banco');
       return res.status(404).json({ erro: 'Coluna Curso não encontrada' });
     }
 
     const enumDef = rows[0].Type;
     if (!enumDef.startsWith('enum(')) {
-      console.error('Coluna Curso retornou tipo inesperado:', enumDef);
       return res.status(400).json({ erro: 'Coluna Curso não é do tipo enum' });
     }
 
+    // Remove enum(...) e divide os valores
     const cursos = enumDef
-      .replace(/^enum\((.*)\)$/, '$1')
+      .slice(5, -1) // tira "enum(" no começo e ")" no fim
       .split(',')
-      .map(c => c.replace(/'/g, ''));
+      .map(c => c.trim().replace(/^'(.*)'$/, '$1'));
 
     return res.status(200).json(cursos);
+
   } catch (err) {
-    console.error('❌ Erro ao obter cursos:', err);
+    console.error('Erro ao obter cursos:', err);
     return res.status(500).json({ erro: 'Erro ao obter cursos' });
   }
 }
