@@ -1,5 +1,3 @@
-// C:\Users\Solução Construtora\Documents\PROJETO-SELECAO-DE-ALUNOS\backend\api\index.js
-
 import express from "express";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -16,17 +14,16 @@ const SECRET_KEY = process.env.SECRET_KEY || "sua_chave_secreta";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import db from "../db.js";
+import getConnection from "../db.js";  // chamei de getConnection para ficar claro
 import loginRoutes from "../routes/login.js";
 import gestoresRoutes from "../routes/gestores.js";
 import cadastroAlunoRoutes from "../routes/cadastroAluno.js";
 
 app.use(express.json());
 app.use(cors({
-  origin: ["http://localhost:5173", "https://projeto-selecao-de-alunos.vercel.app"],
+  origin: ["http://localhost:5173", "https://projeto-selecao-de-alunos.vercel.app"], 
   credentials: true,
 }));
-
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/", loginRoutes);
@@ -45,7 +42,8 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-app.get("/alunos", verificarToken, (req, res) => {
+// Rotas que usam o banco direto, por exemplo:
+app.get("/alunos-media", verificarToken, async (req, res) => {
   const query = `
     SELECT a.nome, a.cpf, 
            ROUND(AVG(n.nota), 2) AS media,
@@ -55,34 +53,19 @@ app.get("/alunos", verificarToken, (req, res) => {
     GROUP BY a.id
   `;
 
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Erro ao buscar alunos:", err);
-      return res.status(500).json({ mensagem: "Erro ao buscar alunos." });
-    }
+  let connection;
+  try {
+    connection = await getConnection();
+    const [results] = await connection.query(query);
     res.json(results);
-  });
-});
-
-app.post("/alunos", (req, res) => {
-  const { cpf, nome, data_nascimento, comprovante_residencia, media_final } = req.body;
-
-  if (!cpf || !nome || !data_nascimento || !comprovante_residencia || isNaN(media_final)) {
-    return res.status(400).json({ mensagem: "Dados inválidos ou incompletos." });
+  } catch (err) {
+    console.error("Erro ao buscar alunos:", err);
+    res.status(500).json({ mensagem: "Erro ao buscar alunos." });
+  } finally {
+    if (connection) await connection.end();
   }
-
-  const sql = `
-    INSERT INTO alunos (cpf, nome, data_nascimento, comprovante_residencia, media_final)
-    VALUES (?, ?, ?, ?, ?)
-  `;
-
-  db.query(sql, [cpf, nome, data_nascimento, comprovante_residencia, media_final], (err) => {
-    if (err) {
-      console.error("Erro ao inserir aluno:", err);
-      return res.status(500).json({ mensagem: "Erro ao cadastrar aluno." });
-    }
-    res.status(200).json({ mensagem: "Aluno cadastrado com sucesso." });
-  });
 });
+
+// mesma coisa para o POST /alunos se necessário...
 
 export default serverless(app);
