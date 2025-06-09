@@ -1,10 +1,11 @@
-import getConnection from '../db';
+import { getDb } from '../db.js';  // ajuste para named import correto
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'sua_chave_secreta';
 
 export default async function handler(req, res) {
+  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -22,7 +23,7 @@ export default async function handler(req, res) {
   let connection;
 
   try {
-    connection = await getConnection();
+    connection = await getDb();  // usa a função correta para conexão
 
     const [results] = await connection.execute(
       'SELECT * FROM gestores WHERE cpf = ?',
