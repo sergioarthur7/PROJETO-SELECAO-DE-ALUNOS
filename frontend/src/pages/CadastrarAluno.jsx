@@ -112,11 +112,12 @@ const CadastrarAluno = () => {
           <div className="form-group">
             <label>Curso</label>
             <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
-              <option value="">Selecione</option>
-              {cursos.map((curso) => (
-                <option key={curso.id} value={curso.sigla}>{curso.nome}</option>
-              ))}
-            </select>
+  <option value="">Selecione</option>
+  {cursos.map((curso) => (
+    <option key={curso.id} value={curso.id}>{curso.nome}</option>
+  ))}
+</select>
+
           </div>
 
           <button type="submit" className="btn-submit">Próximo</button>

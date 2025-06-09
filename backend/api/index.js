@@ -15,9 +15,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import getConnection from "../db.js";  // chamei de getConnection para ficar claro
-import loginRoutes from "../routes/login.js";
-import gestoresRoutes from "../routes/gestores.js";
-import cadastroAlunoRoutes from "../routes/cadastroAluno.js";
+import loginRoutes from "../api/login.js";
+import gestoresRoutes from "../api/gestores.js";
+import cursosRoutes from './api/cursos.js';
+import cadastroAlunoRoutes from './api/cadastroAluno.js';
 
 app.use(express.json());
 app.use(cors({
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", loginRoutes);
 app.use("/gestores", gestoresRoutes);
 app.use("/alunos", cadastroAlunoRoutes);
+app.use('/api/cursos', cursosRoutes);
 
 const verificarToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
