@@ -1,4 +1,4 @@
-import { getDb } from '../db.js';  // ajuste para named import correto
+import getConnection from '../db.js'; // import default, conforme export do db.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   let connection;
 
   try {
-    connection = await getDb();  // usa a função correta para conexão
+    connection = await getConnection();
 
     const [results] = await connection.execute(
       'SELECT * FROM gestores WHERE cpf = ?',
