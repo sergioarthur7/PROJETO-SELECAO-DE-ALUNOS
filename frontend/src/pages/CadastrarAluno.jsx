@@ -110,14 +110,16 @@ const CadastrarAluno = () => {
           </div>
 
           <div className="form-group">
-  <label>Curso</label>
-  <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
-    <option value="">Selecione</option>
-    <option value="Curso1">Curso1</option>
-    <option value="Curso2">Curso2</option>
-    <option value="Curso3">Curso3</option>
-  </select>
-</div>
+            <label>Curso</label>
+            <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
+              <option value="">Selecione</option>
+              <option value="ADM">Administração</option>
+              <option value="AGR">Agropecuária</option>
+              <option value="INF">Informática</option>
+              <option value="SER">Sistema de Energias Renováveis</option>
+              <option value="FIN">Finanças</option>
+            </select>
+          </div>
 
 
           <button type="submit" className="btn-submit">Próximo</button>

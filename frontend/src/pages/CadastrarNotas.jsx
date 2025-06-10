@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import Sidebar from '../components/Sidebar'
-
+import Sidebar from '../components/Sidebar';
 
 const API_URL = import.meta.env.VITE_API_URL || "https://projeto-selecao-de-alunos.vercel.app";
 
@@ -18,7 +17,7 @@ const materias = [
 
 const CadastrarNotas = () => {
   const navigate = useNavigate();
-  const [sidebarAberta, setSidebarAberta] = useState(false);
+  const [sidebarAberta, setSidebarAberta] = useState(true);
   const [notas, setNotas] = useState({});
   const [mediaFinal, setMediaFinal] = useState(0);
   const [aluno, setAluno] = useState(null);
@@ -41,9 +40,10 @@ const CadastrarNotas = () => {
   const handleChange = (materia, ano, valor) => {
     const valorLimpo = valor.replace(",", ".");
     const novaNota = { ...notas[materia], [ano]: valorLimpo };
-    setNotas({ ...notas, [materia]: novaNota });
+    const novasNotas = { ...notas, [materia]: novaNota };
+    setNotas(novasNotas);
 
-    const todasNotas = Object.values({ ...notas, [materia]: novaNota }).flatMap(n => Object.values(n).map(Number));
+    const todasNotas = Object.values(novasNotas).flatMap(n => Object.values(n).map(Number));
     const somatorio = todasNotas.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0);
     const totalNotas = todasNotas.filter(n => !isNaN(n)).length;
 
@@ -89,10 +89,11 @@ const CadastrarNotas = () => {
 
   return (
     <div className="dashboard-body">
+      {/* Botão para abrir/fechar sidebar */}
       <button className="menu-btn" onClick={() => setSidebarAberta(!sidebarAberta)}>☰</button>
 
-      {/* Sidebar funcional */}
-      <Sidebar aberta={sidebarAberta} onLogout={fazerLogout} />
+      {/* Sidebar com props iguais ao CadastrarAluno */}
+      <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
 
       <div className="main-content">
         <h1>Cadastro - Notas por Ano</h1>
