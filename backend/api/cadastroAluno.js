@@ -7,18 +7,19 @@ export default async function handler(req, res) {
   ];
   const origin = req.headers.origin;
 
-  // Ativar CORS
+  // Ativar CORS sempre que possível
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Trata requisição preflight OPTIONS
+  // Requisição OPTIONS (preflight) responde rápido com sucesso
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
+  // Só aceita POST
   if (req.method === 'POST') {
     try {
       const {
@@ -55,6 +56,10 @@ export default async function handler(req, res) {
         (err, result) => {
           if (err) {
             console.error('Erro ao cadastrar aluno:', err);
+            // Enviar o header CORS aqui também caso necessário
+            if (allowedOrigins.includes(origin)) {
+              res.setHeader('Access-Control-Allow-Origin', origin);
+            }
             return res.status(500).json({ mensagem: 'Erro ao cadastrar aluno.' });
           }
 
@@ -63,10 +68,14 @@ export default async function handler(req, res) {
       );
     } catch (err) {
       console.error('Erro interno:', err);
+      // Header CORS se erro ocorrer
+      if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+      }
       res.status(500).json({ mensagem: 'Erro interno do servidor.' });
     }
   } else {
-    res.setHeader('Allow', ['POST', 'OPTIONS']);
+    res.setHeader('Allow', 'POST, OPTIONS');
     res.status(405).end(`Método ${req.method} não permitido`);
   }
 }
