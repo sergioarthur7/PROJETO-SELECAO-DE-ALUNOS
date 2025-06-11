@@ -1,11 +1,11 @@
-import db from '../db'; // ou ajuste esse caminho
+import db from '../db';
 import cors from '../lib/cors-middleware';
 
 export default async function handler(req, res) {
-  await cors(req, res); // 🔥 habilita CORS corretamente na Vercel
+  await cors(req, res); // middleware CORS funcionando na Vercel
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    return res.status(200).end(); // pré-flight ok
   }
 
   if (req.method === 'POST') {
