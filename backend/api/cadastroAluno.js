@@ -1,4 +1,4 @@
-import db from '../db.js'; // ou ajuste esse caminho se necessário
+import db from '../db'; // ou ajuste esse caminho se necessário
 
 export default async function handler(req, res) {
   // CORS: Permitir requisições do localhost
