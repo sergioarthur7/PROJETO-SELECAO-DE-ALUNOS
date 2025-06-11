@@ -59,6 +59,7 @@ const alunoCompleto = {
 };
 
 
+
     try {
       console.log("Enviando:", alunoCompleto);
       const response = await fetch(`${API_URL}/api/cadastroAluno`, {
