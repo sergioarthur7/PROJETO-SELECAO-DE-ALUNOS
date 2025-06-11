@@ -1,132 +1,65 @@
-// src/pages/CadastrarAluno.jsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import db from '../db.js'; // ou ajuste o caminho se necessário
 
-const CadastrarAluno = () => {
-  const [sidebarAberta, setSidebarAberta] = useState(true);
-  const navigate = useNavigate();
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [dataNascimento, setDataNascimento] = useState('');
-  const [comprovante, setComprovante] = useState('');
-  const [cota, setCota] = useState('');
-  const [cursoSelecionado, setCursoSelecionado] = useState('');
-  const [mensagem, setMensagem] = useState('');
-  const [cursos, setCursos] = useState([]);
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-  // Buscar cursos do banco de dados
-  useEffect(() => {
-    const buscarCursos = async () => {
-      try {
-        const resposta = await fetch('https://projeto-selecao-de-alunos.vercel.app/api/cursos');
-        const dados = await resposta.json();
-        setCursos(dados);
-      } catch (erro) {
-        console.error('Erro ao buscar cursos:', erro);
+  if (req.method === 'POST') {
+    try {
+      const {
+        nome,
+        cpf,
+        data_nascimento,
+        comprovante_residencia,
+        media_final,
+        cota,
+        curso
+      } = req.body;
+
+      console.log('[INFO] Dados recebidos:', req.body);
+
+      if (!nome || !cpf || !data_nascimento || !comprovante_residencia || !curso) {
+        console.warn('[WARN] Dados incompletos.');
+        return res.status(400).json({ mensagem: 'Dados incompletos.' });
       }
-    };
 
-    buscarCursos();
-  }, []);
+      const query = `
+        INSERT INTO alunos
+        (nome, cpf, data_nascimento, comprovante_residencia, media_final, Cota, Curso)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+      db.query(
+        query,
+        [
+          nome,
+          cpf,
+          data_nascimento,
+          comprovante_residencia,
+          media_final || null,
+          cota || null,
+          curso,
+        ],
+        (err, result) => {
+          if (err) {
+            console.error('[ERRO] Falha ao executar query:', err);
+            return res.status(500).json({ mensagem: 'Erro ao cadastrar aluno.' });
+          }
 
-    const dadosAluno = {
-      nome,
-      cpf,
-      data_nascimento: dataNascimento,
-      comprovante_residencia: comprovante,
-      cota,
-      curso: cursoSelecionado,
-    };
-
-    localStorage.setItem('dadosAluno', JSON.stringify(dadosAluno));
-    navigate('/cadastrar-notas');
-  };
-
-  const fazerLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
-
-  return (
-    <div className="dashboard-body">
-      <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
-
-      <div className="main-content">
-        <br />
-        <h1>Cadastro de Aluno</h1>
-        <br />
-        {mensagem && <p>{mensagem}</p>}
-
-        <form onSubmit={handleSubmit} className="formulario-aluno">
-          <div className="form-group">
-            <label>Nome</label>
-            <input type="text" value={nome} onChange={e => setNome(e.target.value)} required />
-          </div>
-
-          <div className="form-group">
-            <label>CPF</label>
-            <input 
-              type="text"
-              maxLength="11"
-              value={cpf}
-              onChange={e => setCpf(e.target.value)}
-              required
-              pattern="\d{11}"
-              title="Digite um CPF válido (somente números)"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Data de Nascimento</label>
-            <input type="date" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} required />
-          </div>
-
-          <div className="form-group">
-            <label>Comprovante de Residência</label>
-            <select value={comprovante} onChange={e => setComprovante(e.target.value)} required>
-              <option value="">Selecione</option>
-              <option value="Água">Água</option>
-              <option value="Energia">Energia</option>
-              <option value="Telefone">Telefone</option>
-              <option value="Correspondência bancária">Correspondência bancária</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Cota</label>
-            <select value={cota} onChange={e => setCota(e.target.value)} required>
-              <option value="">Selecione</option>
-              <option value="RPAC">REDE PÚBLICA – AMPLA CONCORRÊNCIA</option>
-              <option value="RDTE">REDE PÚBLICA – COTA TERRITÓRIO DA ESCOLA</option>
-              <option value="RPRAC">REDE PRIVADA – AMPLA CONCORRÊNCIA</option>
-              <option value="RPRTE">REDE PRIVADA – COTA TERRITÓRIO DA ESCOLA</option>
-              <option value="ECD">ESTUDANTES COM DEFICIÊNCIA</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Curso</label>
-            <select value={cursoSelecionado} onChange={e => setCursoSelecionado(e.target.value)} required>
-              <option value="">Selecione</option>
-              <option value="ADM">Administração</option>
-              <option value="AGR">Agropecuária</option>
-              <option value="INF">Informática</option>
-              <option value="SER">Sistema de Energias Renováveis</option>
-              <option value="FIN">Finanças</option>
-            </select>
-          </div>
-
-
-          <button type="submit" className="btn-submit">Próximo</button>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-export default CadastrarAluno;
+          console.log('[SUCESSO] Aluno cadastrado com ID:', result.insertId);
+          res.status(201).json({ mensagem: 'Aluno cadastrado com sucesso!', alunoId: result.insertId });
+        }
+      );
+    } catch (err) {
+      console.error('[FATAL] Erro inesperado:', err);
+      res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+    }
+  } else {
+    res.status(405).json({ mensagem: 'Método não permitido.' });
+  }
+}
