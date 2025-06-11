@@ -87,21 +87,19 @@ const CadastrarNotas = () => {
     navigate("/login");
   };
 
-  return (
-    <div className="dashboard-body">
-      {/* Botão para abrir/fechar sidebar */}
-      <button className="menu-btn" onClick={() => setSidebarAberta(!sidebarAberta)}>☰</button>
+return (
+  <div className="dashboard-body">
+    <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
 
-      {/* Sidebar com props iguais ao CadastrarAluno */}
-      <Sidebar sidebarAberta={sidebarAberta} setSidebarAberta={setSidebarAberta} />
+    <div className="main-content">
+      <div className="cadastro-notas-container">
+        <h1>Cadastro de Notas por Ano</h1>
 
-      <div className="main-content">
-        <h1>Cadastro - Notas por Ano</h1>
-        <form onSubmit={handleSubmit} style={{ overflowX: 'auto' }}>
-          <table style={{ borderCollapse: 'collapse', width: '100%', marginBottom: '20px' }}>
+        <form onSubmit={handleSubmit}>
+          <table className="tabela-notas">
             <thead>
               <tr>
-                <th style={{ padding: '8px', background: '#ddd' }}>Matéria</th>
+                <th>Matéria</th>
                 <th>6º Ano</th>
                 <th>7º Ano</th>
                 <th>8º Ano</th>
@@ -111,7 +109,7 @@ const CadastrarNotas = () => {
             <tbody>
               {materias.map(materia => (
                 <tr key={materia}>
-                  <td style={{ padding: '6px', fontWeight: 'bold' }}>{materia}</td>
+                  <td style={{ fontWeight: 'bold' }}>{materia}</td>
                   {["ano6", "ano7", "ano8", "ano9"].map(ano => (
                     <td key={ano}>
                       <input
@@ -122,7 +120,6 @@ const CadastrarNotas = () => {
                         required
                         value={notas[materia]?.[ano] || ""}
                         onChange={(e) => handleChange(materia, ano, e.target.value)}
-                        style={{ width: '60px', padding: '4px' }}
                       />
                     </td>
                   ))}
@@ -131,12 +128,14 @@ const CadastrarNotas = () => {
             </tbody>
           </table>
 
-          <p><strong>Média Final:</strong> {mediaFinal}</p>
-          <button type="submit">Finalizar Cadastro</button>
+          <p className="media-final">Média Final: {mediaFinal}</p>
+          <button className="botao-finalizar" type="submit">Finalizar Cadastro</button>
         </form>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default CadastrarNotas;

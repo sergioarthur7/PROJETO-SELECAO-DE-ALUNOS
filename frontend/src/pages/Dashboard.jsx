@@ -32,7 +32,7 @@ const Dashboard = () => {
             <p>Ver Alunos</p>
           </Link>
 
-          <Link to="/voltar" className="dashboard-card">
+          <Link to="/cursos" className="dashboard-card">
             <div className="dashboard-icon">
               <GraduationCap size={64} />
             </div>

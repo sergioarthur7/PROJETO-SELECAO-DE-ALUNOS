@@ -519,11 +519,89 @@ button:hover {
 
 
 /* ============================
-   CADASTRAR NOTAS
+   CADASTRO DE NOTAS
 =============================== */
-.cadastrar-notas-body {
-  background: linear-gradient(135deg, #3b771d, #3e7025);
+
+.cadastro-notas-container {
+  flex: 1;
+  padding: 40px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 16px;
+  margin: 2rem auto;
+  max-width: 1000px;
+  box-shadow: 0 4px 20px rgba(1, 138, 33, 0.609);
+  backdrop-filter: blur(8px);
+  border-color: #000000;
 }
+
+.cadastro-notas-container h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #079600;
+  
+}
+
+.tabela-notas {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff12;
+  color: #000000;
+}
+
+.tabela-notas th,
+.tabela-notas td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ffffff22;
+}
+
+.tabela-notas thead {
+  background-color: #049444;
+}
+
+.tabela-notas th {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.tabela-notas input {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background-color: #4c4c4c;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.media-final {
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  color: #019813;
+}
+
+.botao-finalizar {
+  margin-top: 2rem;
+  padding: 10px 20px;
+  background-color: #0e7800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.botao-finalizar:hover {
+  background-color: #3ecf1d;
+}
+
 
 
 /* ============================

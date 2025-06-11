@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
-import { LayoutDashboard, GraduationCap, UserPlus, LogOut } from 'lucide-react';
+import { LayoutDashboard, GraduationCap, UserPlus, LogOut, Users, User, FileText } from 'lucide-react';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Sidebar = () => {
             </NavLink>
 
             <NavLink to="/ver-alunos" className="sidebar-item">
-              <GraduationCap size={20} />
+              <Users size={20} />
               Ver Alunos
             </NavLink>
 
@@ -53,12 +53,17 @@ const Sidebar = () => {
             </NavLink>
 
             <NavLink to="/cursos" className="sidebar-item">
-              <UserPlus size={20} />
+              <GraduationCap size={20} /> 
               Cursos
+            </NavLink>
+
+            <NavLink to="/relatorio" className="sidebar-item">
+              <FileText size={20} />
+              Relatório
             </NavLink>
           
             <NavLink to="/conta" className="sidebar-item">
-              <UserPlus size={20} />
+              <User size={20} />
               Conta
             </NavLink>
             
