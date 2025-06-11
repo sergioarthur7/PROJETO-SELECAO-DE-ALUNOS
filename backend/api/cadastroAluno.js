@@ -1,12 +1,21 @@
 import db from '../db'; // ou ajuste esse caminho se necessário
 
 export default async function handler(req, res) {
-  // CORS: Permitir requisições do localhost
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  // ✅ CORS: permitir localhost e produção
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://projeto-selecao-de-alunos.vercel.app'
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Tratamento para requisição OPTIONS (preflight)
+  // ✅ Pré-responder a requisição OPTIONS (preflight)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
