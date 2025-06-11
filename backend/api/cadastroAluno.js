@@ -1,11 +1,22 @@
-import db from '../db';
-import cors from '../lib/cors-middleware';
+import db from '../db'; // ajuste esse caminho se necessário
 
 export default async function handler(req, res) {
-  await cors(req, res); // middleware CORS funcionando na Vercel
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://projeto-selecao-de-alunos.vercel.app'
+  ];
+  const origin = req.headers.origin;
 
+  // Ativar CORS
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Trata requisição preflight OPTIONS
   if (req.method === 'OPTIONS') {
-    return res.status(200).end(); // pré-flight ok
+    return res.status(200).end();
   }
 
   if (req.method === 'POST') {
@@ -55,6 +66,7 @@ export default async function handler(req, res) {
       res.status(500).json({ mensagem: 'Erro interno do servidor.' });
     }
   } else {
-    res.status(405).json({ mensagem: 'Método não permitido.' });
+    res.setHeader('Allow', ['POST', 'OPTIONS']);
+    res.status(405).end(`Método ${req.method} não permitido`);
   }
 }
