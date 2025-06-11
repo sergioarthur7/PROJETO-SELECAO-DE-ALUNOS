@@ -53,11 +53,11 @@ const CadastrarNotas = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const alunoCompleto = {
-      ...aluno,
-      notas,
-      media_final: parseFloat(mediaFinal.replace(",", "."))
-    };
+const alunoCompleto = {
+  ...aluno,
+  media_final: parseFloat(mediaFinal.replace(",", "."))
+};
+
 
     try {
       console.log("Enviando:", alunoCompleto);
