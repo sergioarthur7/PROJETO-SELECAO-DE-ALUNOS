@@ -1,21 +1,9 @@
-import db from '../db'; // ou ajuste esse caminho se necessário
+import db from '../db'; // ou ajuste esse caminho
+import cors from '../lib/cors-middleware';
 
 export default async function handler(req, res) {
-  // ✅ CORS: permitir localhost e produção
-  const allowedOrigins = [
-    'http://localhost:5173',
-    'https://projeto-selecao-de-alunos.vercel.app'
-  ];
-  const origin = req.headers.origin;
+  await cors(req, res); // 🔥 habilita CORS corretamente na Vercel
 
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  // ✅ Pré-responder a requisição OPTIONS (preflight)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
