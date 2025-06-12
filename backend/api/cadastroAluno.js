@@ -1,10 +1,4 @@
-//C:\Users\3 INF\Documents\PROJETO-SELECAO-DE-ALUNOS\backend\api\cadastroAluno.js
-let db;
-try {
-  db = (await import('../../db.js')).default;
-} catch (err) {
-  console.error('Erro ao importar o banco de dados:', err);
-}
+import db from './db.js';
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -29,10 +23,6 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST, OPTIONS');
     return res.status(405).json({ mensagem: `Método ${req.method} não permitido` });
-  }
-
-  if (!db) {
-    return res.status(500).json({ mensagem: 'Falha ao conectar ao banco de dados.' });
   }
 
   const {
@@ -71,6 +61,9 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error('Erro ao cadastrar aluno:', err);
-    return res.status(500).json({ mensagem: 'Erro interno do servidor.', erro: err.message });
+    return res.status(500).json({
+      mensagem: 'Erro interno do servidor.',
+      erro: err.message
+    });
   }
 }

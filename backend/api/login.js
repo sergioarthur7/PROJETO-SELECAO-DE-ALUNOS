@@ -1,4 +1,4 @@
-import pool from '../db.js'; // import default, conforme export do db.js
+import pool from './db'; // import default, conforme export do db.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
