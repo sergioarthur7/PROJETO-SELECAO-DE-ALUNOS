@@ -1,4 +1,4 @@
-import getConnection from '../db.js'; // import default, conforme export do db.js
+import pool from '../db.js'; // import default, conforme export do db.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   let connection;
 
   try {
-    connection = await getConnection();
+    connection = await pool.getConnection();
 
     const [results] = await connection.execute(
       'SELECT * FROM gestores WHERE cpf = ?',
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ mensagem: 'Erro interno no servidor', erro: err.message });
   } finally {
     if (connection) {
-      await connection.end();
+      await connection.release();
     }
   }
 }
