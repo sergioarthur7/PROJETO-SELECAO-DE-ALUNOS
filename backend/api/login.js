@@ -1,4 +1,5 @@
 // backend/api/login.js
+import bcrypt from 'bcryptjs';  // Usar bcryptjs funciona bem em Node.js e Vercel
 
 let db;
 try {
@@ -6,7 +7,6 @@ try {
 } catch (err) {
   console.error('Erro ao importar o banco de dados:', err);
 }
-
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -44,13 +44,23 @@ export default async function handler(req, res) {
   }
 
   try {
-    const [rows] = await db.execute('SELECT * FROM gestores WHERE cpf = ? AND senha = ?', [cpf, senha]);
+    // Buscar apenas pelo CPF
+    const [rows] = await db.execute('SELECT * FROM gestores WHERE cpf = ?', [cpf]);
 
     if (rows.length === 0) {
       return res.status(401).json({ mensagem: 'CPF ou senha inválidos.' });
     }
 
-    return res.status(200).json({ mensagem: 'Login bem-sucedido.', gestor: rows[0] });
+    const gestor = rows[0];
+
+    // Comparar a senha fornecida com a senha criptografada no banco
+    const senhaValida = await bcrypt.compare(senha, gestor.senha);
+
+    if (!senhaValida) {
+      return res.status(401).json({ mensagem: 'CPF ou senha inválidos.' });
+    }
+
+    return res.status(200).json({ mensagem: 'Login bem-sucedido.', gestor });
   } catch (err) {
     console.error('Erro ao realizar login:', err);
     return res.status(500).json({ mensagem: 'Erro interno do servidor.', erro: err.message });
