@@ -1,7 +1,6 @@
-const db = require('./db');
+import db from '../db.js'; // Ajuste conforme a localização real do seu db.js
 
-module.exports = async (req, res) => {
-  // Habilitar CORS
+export default async function handler(req, res) {
   const allowedOrigins = [
     'http://localhost:5173',
     'https://projeto-selecao-de-alunos.vercel.app'
@@ -16,12 +15,10 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Pré-você tratar requisições OPTIONS
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Rota principal (GET)
   if (req.method === 'GET') {
     const query = `
       SELECT 
@@ -38,16 +35,15 @@ module.exports = async (req, res) => {
       GROUP BY a.id
     `;
 
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error("Erro ao buscar alunos:", err);
-        return res.status(500).json({ mensagem: "Erro ao buscar alunos." });
-      }
-
+    try {
+      const [results] = await db.promise().query(query);
       res.status(200).json(results);
-    });
+    } catch (err) {
+      console.error('Erro ao buscar alunos:', err);
+      res.status(500).json({ mensagem: 'Erro ao buscar alunos.' });
+    }
   } else {
     res.setHeader('Allow', 'GET, OPTIONS');
-    res.status(405).json({ mensagem: "Método não permitido." });
+    res.status(405).json({ mensagem: 'Método não permitido.' });
   }
-};
+}
