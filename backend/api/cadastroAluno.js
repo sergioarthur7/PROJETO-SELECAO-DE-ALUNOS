@@ -6,12 +6,15 @@ const allowedOrigins = [
 ];
 
 export default async function handler(req, res) {
-  const origin = req.headers.origin;
+  const origin = req.headers.origin || '';
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Opcional, remova se quiser mais segurança
   }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -58,6 +61,6 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error('Erro ao cadastrar aluno:', err);
-    return res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+    return res.status(500).json({ mensagem: 'Erro interno do servidor.', erro: err.message });
   }
 }
