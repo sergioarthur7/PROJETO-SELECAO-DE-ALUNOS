@@ -2,10 +2,11 @@
 
 let db;
 try {
-  db = (await import('./db')).default;
+  db = (await import('./db.js')).default;
 } catch (err) {
   console.error('Erro ao importar o banco de dados:', err);
 }
+
 
 const allowedOrigins = [
   'http://localhost:5173',
