@@ -1,4 +1,10 @@
-import db from '../db';
+//C:\Users\3 INF\Documents\PROJETO-SELECAO-DE-ALUNOS\backend\api\cadastroAluno.js
+let db;
+try {
+  db = (await import('../../db.js')).default;
+} catch (err) {
+  console.error('Erro ao importar o banco de dados:', err);
+}
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -7,28 +13,28 @@ const allowedOrigins = [
 
 export default async function handler(req, res) {
   const origin = req.headers.origin || '';
-
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin'); // Evita cache indevido de CORS na Vercel
+    res.setHeader('Vary', 'Origin');
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-  // CORS preflight: OPTIONS
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Verificação de método
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST, OPTIONS');
     return res.status(405).json({ mensagem: `Método ${req.method} não permitido` });
   }
 
-  // Captura dos dados
+  if (!db) {
+    return res.status(500).json({ mensagem: 'Falha ao conectar ao banco de dados.' });
+  }
+
   const {
     nome,
     cpf,
