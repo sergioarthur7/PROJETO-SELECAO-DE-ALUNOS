@@ -7,24 +7,28 @@ const allowedOrigins = [
 
 export default async function handler(req, res) {
   const origin = req.headers.origin || '';
+
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Opcional, remova se quiser mais segurança
+    res.setHeader('Vary', 'Origin'); // Evita cache indevido de CORS na Vercel
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
+  // CORS preflight: OPTIONS
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
+  // Verificação de método
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST, OPTIONS');
     return res.status(405).json({ mensagem: `Método ${req.method} não permitido` });
   }
 
+  // Captura dos dados
   const {
     nome,
     cpf,
