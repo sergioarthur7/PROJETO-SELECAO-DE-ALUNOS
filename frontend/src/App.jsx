@@ -8,7 +8,7 @@ import Conta from './pages/Conta'
 import Notwithstanding from './pages/Notwithstanding'
 import CadastrarNotas from './pages/CadastrarNotas' 
 import VerAlunos from './pages/VerAlunos'
-import Cursos from './pages/Cursos'  // <--- faltava importar
+import Cursos from './pages/cursos'  // <--- faltava importar
 
 function App() {
   return (
