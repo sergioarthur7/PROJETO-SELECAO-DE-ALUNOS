@@ -1,4 +1,5 @@
-import db from '../db.js'; // Ajuste conforme a localização real do seu db.js
+// backend/api/alunos.js
+import db from '../db.js';
 
 export default async function handler(req, res) {
   const allowedOrigins = [
@@ -37,13 +38,13 @@ export default async function handler(req, res) {
 
     try {
       const [results] = await db.promise().query(query);
-      res.status(200).json(results);
+      return res.status(200).json(results);
     } catch (err) {
-      console.error('Erro ao buscar alunos:', err);
-      res.status(500).json({ mensagem: 'Erro ao buscar alunos.' });
+      console.error('Erro no SELECT:', err.message);
+      return res.status(500).json({ mensagem: 'Erro ao buscar alunos.', erro: err.message });
     }
   } else {
     res.setHeader('Allow', 'GET, OPTIONS');
-    res.status(405).json({ mensagem: 'Método não permitido.' });
+    return res.status(405).json({ mensagem: 'Método não permitido.' });
   }
 }
