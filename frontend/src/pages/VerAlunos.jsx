@@ -9,14 +9,26 @@ const VerAlunos = () => {
   useEffect(() => {
     fetch('https://projeto-selecao-de-alunos.vercel.app/api/alunos')
       .then(res => res.json())
-      .then(data => setAlunos(data))
-      .catch(error => console.error('Erro ao buscar alunos:', error));
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAlunos(data);
+        } else {
+          console.error('Resposta inesperada do servidor:', data);
+          setAlunos([]); // evita quebra no .filter
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao buscar alunos:', error);
+        setAlunos([]); // evita quebra no .filter
+      });
   }, []);
 
-  const alunosFiltrados = alunos.filter((aluno) =>
-    aluno.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    aluno.cpf.includes(filtro)
-  );
+  const alunosFiltrados = Array.isArray(alunos)
+    ? alunos.filter((aluno) =>
+        aluno.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+        aluno.cpf.includes(filtro)
+      )
+    : [];
 
   const exportarCSV = () => {
     const csv = [
