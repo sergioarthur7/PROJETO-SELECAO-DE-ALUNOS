@@ -1,5 +1,5 @@
 // backend/api/alunos.js
-import db from '../db.js';
+import db from './db';
 
 export default async function handler(req, res) {
   const allowedOrigins = [
